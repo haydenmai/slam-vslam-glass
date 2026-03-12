@@ -24,7 +24,7 @@ RUN useradd -m $USERNAME && \
 RUN gpasswd -a $USERNAME video && \
     gpasswd -a $USERNAME dialout
 
-# --- ROS2 packages + Pi 5 GPIO library ---
+# --- ROS2 packages ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-colcon-common-extensions \

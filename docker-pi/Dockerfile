@@ -22,10 +22,7 @@ RUN useradd -m $USERNAME && \
 
 # --- Hardware access ---
 RUN gpasswd -a $USERNAME video && \
-    gpasswd -a $USERNAME dialout && \
-    gpasswd -a $USERNAME gpio && \
-    gpasswd -a $USERNAME i2c && \
-    gpasswd -a $USERNAME spi
+    gpasswd -a $USERNAME dialout
 
 # --- ROS2 packages + Pi 5 GPIO library ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -35,8 +32,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-rosbag2-storage-mcap \
     ros-dev-tools \
-    python3-libgpiod \
-    gpiod \
     && rm -rf /var/lib/apt/lists/*
 
 # --- rosdep ---

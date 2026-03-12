@@ -27,9 +27,9 @@ RUN groupadd -f render && \
     gpasswd -a $USERNAME render
 
 # --- Fix ROS2 GPG key ---
-RUN apt-get update && apt-get install -y curl gnupg2 && \
-    rm -f /usr/share/keyrings/ros-archive-keyring.gpg && \
+RUN rm -f /usr/share/keyrings/ros-archive-keyring.gpg && \
     rm -f /etc/apt/sources.list.d/ros2.list && \
+    apt-get update && apt-get install -y curl gnupg2 && \
     curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | \
     gpg --dearmor -o /usr/share/keyrings/ros-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu jammy main" \

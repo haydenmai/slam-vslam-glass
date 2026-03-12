@@ -1,29 +1,27 @@
-# Testing docker container
+# SLAM/VSLAM in Glass Environments
+## Overview
 
-### Build & Run
+## Misc.
+
+## Testing docker container
+### Run script
 ```
-# Jetson
-docker compose -f docker-compose.jetson.yml build
-docker compose -f docker-compose.jetson.yml up -d
+# build and start
+./start.sh pi up
+./start.sh jetson up
 
-# Pi
-docker compose -f docker-compose.pi.yml build
-docker compose -f docker-compose.pi.yml up -d
-```
-
-### Open a shell
-```
-# Jetson
-docker compose -f docker-compose.jetson.yml exec ros2 bash
-
-# Pi
-docker compose -f docker-compose.pi.yml exec ros2 bash
+# other commands
+./start.sh pi build       # build only
+./start.sh pi shell       # open a shell inside the container
+./start.sh pi logs        # follow logs
+./start.sh pi down        # stop the container
+./start.sh pi restart     # stop and restart
 ```
 
 ### Verify
 ```
-ros2 --version
-# expected: ros2 humble
+printenv ROS_DISTRO
+# expected: humble
 
 echo $RMW_IMPLEMENTATION
 # expected: rmw_cyclonedds_cpp
@@ -44,10 +42,9 @@ ros2 topic list
 
 ### Verify nodes outside containers
 ```
-# on Jetson container
+# in container
 ros2 run demo_nodes_cpp talker
 
-# on Pi container
+# anywhere else outside container or in another container
 ros2 run demo_nodes_cpp listener
-# expected: Pi listener receives messages published from Jetson
 ```

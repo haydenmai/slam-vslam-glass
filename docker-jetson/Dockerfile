@@ -35,7 +35,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-rosbag2-storage-mcap \
     ros-dev-tools \
+	ros-humble-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p $HOME/.ros/log && \
+	chown -R $USERNAME:$USERNAME $HOME/.ros
 
 # --- rosdep ---
 RUN rosdep init 2>/dev/null || true && rosdep update

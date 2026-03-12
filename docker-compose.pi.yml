@@ -12,9 +12,9 @@ services:
     volumes:
       - ./src:/home/linda/ros2_ws/src
       - ./cyclone_dds.xml:/home/linda/cyclone_dds.xml
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0       # USB-serial
-      - /dev/ttyAMA0:/dev/ttyAMA0       # Pi UART
+    #devices:
+    # - /dev/ttyUSB0:/dev/ttyUSB0       # USB-serial
+    # - /dev/ttyAMA0:/dev/ttyAMA0       # Pi UART
     device_cgroup_rules:
       - 'c 189:* rmw'                   # all USB devices
       - 'c 81:* rmw'                    # all video devices

@@ -2,6 +2,7 @@ FROM dustynv/ros:humble-ros-base-l4t-r36.2.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DISTRO=humble
+ENV ROS_DOMAIN_ID=0
 
 # --- User setup ---
 ARG UID=1000
@@ -20,9 +21,9 @@ RUN useradd -m $USERNAME && \
     groupmod --gid $GID $USERNAME
 
 # --- Hardware access ---
-RUN gpasswd -a $USERNAME video && \
+RUN groupadd -f render && \
+	gpasswd -a $USERNAME video && \
     gpasswd -a $USERNAME dialout && \
-    gpasswd -a $USERNAME gpio && \
     gpasswd -a $USERNAME render
 
 # --- ROS2 packages ---
@@ -38,6 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	ros-humble-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
 
+# --- Log directory ---
 RUN mkdir -p $HOME/.ros/log && \
 	chown -R $USERNAME:$USERNAME $HOME/.ros
 
@@ -60,7 +62,8 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source ~/ros2_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc && \
     echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc && \
-    echo "export PATH=/usr/local/cuda/bin:$PATH" >> ~/.bashrc && \
+	echo "export ROS_DOMAIN_ID=0" >> ~/.bashrc && \    
+	echo "export PATH=/usr/local/cuda/bin:$PATH" >> ~/.bashrc && \
     echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> ~/.bashrc
 
 ENTRYPOINT ["/entrypoint.sh"]

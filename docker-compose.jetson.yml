@@ -16,9 +16,9 @@ services:
       - ./src:/home/linda/ros2_ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./cyclone_dds.xml:/home/linda/cyclone_dds.xml      # optional
-    #devices:
-    #  - /dev/video0:/dev/video0
-    #  - /dev/ttyUSB0:/dev/ttyUSB0
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/ttyUSB0:/dev/ttyUSB0
     device_cgroup_rules:
       - 'c 189:* rmw'
       - 'c 81:* rmw'

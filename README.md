@@ -17,7 +17,12 @@
 ./start.sh pi down        # stop the container
 ./start.sh pi restart     # stop and restart
 ```
-
+### Export variables for Jetson
+```
+# In terminal:
+export ROS_DOMAIN_ID=0
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+```
 ### Verify
 ```
 printenv ROS_DISTRO

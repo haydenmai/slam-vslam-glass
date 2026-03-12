@@ -67,13 +67,13 @@ RUN mkdir -p src
 SHELL ["/bin/bash", "-l", "-c"]
 
 # --- Environment ---
-RUN echo 'if [ -n "${ROS_ROOT:-}" ] && [ -f "$ROS_ROOT/install/setup.bash" ]; then source "$ROS_ROOT/install/setup.bash"; elif [ -f "/opt/ros/$ROS_DISTRO/setup.bash" ]; then source "/opt/ros/$ROS_DISTRO/setup.bash"; fi' >> ~/.bashrc && \
+RUN echo "source \$ROS_ROOT/install/setup.bash" >> ~/.bashrc && \
     echo "source ~/ros2_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc && \
     echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc && \
     echo "export ROS_DOMAIN_ID=0" >> ~/.bashrc && \
-    echo "export PATH=/usr/local/cuda/bin:$PATH" >> ~/.bashrc && \
-    echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH" >> ~/.bashrc
+    echo "export PATH=/usr/local/cuda/bin:\$PATH" >> ~/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/usr/local/cuda/lib64:\$LD_LIBRARY_PATH" >> ~/.bashrc
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash"]

@@ -27,7 +27,10 @@ RUN groupadd -f render && \
     gpasswd -a $USERNAME render
 
 # --- ROS2 packages ---
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y curl && \
+    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+    -o /usr/share/keyrings/ros-archive-keyring.gpg && \
+    apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-colcon-common-extensions \
     python3-rosdep \
@@ -35,8 +38,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-rqt \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-rosbag2-storage-mcap \
+    ros-humble-demo-nodes-cpp \
     ros-dev-tools \
-	ros-humble-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # --- Log directory ---

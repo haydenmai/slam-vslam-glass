@@ -2,7 +2,7 @@ services:
   ros2:
     build:
       context: ./docker-pi        # where to look for files (entrypoint.sh etc.)
-      dockerfile: ./docker-pi/Dockerfile
+      dockerfile: Dockerfile
     container_name: ros2_humble_pi
     network_mode: host
     environment:

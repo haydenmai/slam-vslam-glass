@@ -1,0 +1,24 @@
+services:
+  ros2:
+    build: .
+    container_name: ros2_humble_jetson
+    network_mode: host
+    runtime: nvidia
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - CYCLONEDDS_URI=file:///home/linda/cyclone_dds.xml  # optional
+    volumes:
+      - ./src:/home/linda/ros2_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./cyclone_dds.xml:/home/linda/cyclone_dds.xml      # optional
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    device_cgroup_rules:
+      - 'c 189:* rmw'
+      - 'c 81:* rmw'
+    stdin_open: true
+    tty: true

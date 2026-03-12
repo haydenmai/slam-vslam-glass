@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-    echo "Usage: ./start.sh [jetson|pi] [build|up|down|restart|logs]"
+    echo "Usage: ./start-container.sh [jetson|pi] [build|up|down|restart|logs]"
     echo ""
     echo "  Platform:"
     echo "    jetson    - Build/run for Jetson Orin Nano"
@@ -18,9 +18,9 @@ usage() {
     echo "    shell     - Open a shell inside the running container"
     echo ""
     echo "  Examples:"
-    echo "    ./start.sh pi up"
-    echo "    ./start.sh jetson build"
-    echo "    ./start.sh pi shell"
+    echo "    ./start-container.sh pi up"
+    echo "    ./start-container.sh jetson build"
+    echo "    ./start-container.sh pi shell"
     exit 1
 }
 
@@ -69,7 +69,7 @@ case $COMMAND in
         docker compose -f $COMPOSE_FILE up -d
         echo ""
         echo "Container started. To open a shell run:"
-        echo "  ./start.sh $PLATFORM shell"
+        echo "  ./start-container.sh $PLATFORM shell"
         ;;
     down)
         echo "Stopping $PLATFORM container..."

@@ -63,3 +63,4 @@ py/
 frames*
 *log
 .vscode
+*.code-workspace

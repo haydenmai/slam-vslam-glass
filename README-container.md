@@ -17,22 +17,6 @@ git clone -b cmpt720_sp26 git@github.com:SFU-MARS/ros2_ws.git
 
 3. See [this article](https://www.allisonthackston.com/articles/vscode-docker-ros2.html) for deeper insight
 
-### Choosing the right devcontainer config
-
-The default `.devcontainer/devcontainer.json` is the portable option and does not require GPU support.
-
-If you want GPU passthrough, swap in the config that matches your host before reopening in a container:
-
-```bash
-# Native Linux with NVIDIA Container Toolkit
-cp .devcontainer/linux-gpu-devcontainer.json .devcontainer/devcontainer.json
-
-# Windows WSLg
-cp .devcontainer/wsl-devcontainer.json .devcontainer/devcontainer.json
-```
-
-If VS Code already created a failed devcontainer from an older config, run **Dev Containers: Rebuild Container** after switching files so it recreates the container with the updated run arguments.
-
 ## Docker Setup
 Before proceeding, ensure the following are installed on your system:
 * [Docker](https://docs.docker.com/engine/install/)

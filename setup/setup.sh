@@ -32,6 +32,15 @@ set -e
 mkdir -p src
 mkdir -p py
 
+seed_root="${ROS_WS_SEED:-/opt/ros2_ws_seed}"
+seed_src="${seed_root}/src"
+
+# Populate src from an image-seeded snapshot when running without a bind mount.
+if [[ -d "${seed_src}" ]] && [[ -z "$(find src -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]]; then
+    echo "Seeding workspace src/ from ${seed_src}"
+    cp -a "${seed_src}/." src/
+fi
+
 # ======================
 # Clone non-ROS packages
 # ======================

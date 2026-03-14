@@ -4,8 +4,9 @@
 //       wslg: https://github.com/microsoft/wslg
 //
 {
-	"dockerFile": "Dockerfile",
 	"build": {
+		"context": "..",
+		"dockerfile": ".devcontainer/Dockerfile",
 		"args": {
 			"WORKSPACE": "${containerWorkspaceFolder}"
 		}

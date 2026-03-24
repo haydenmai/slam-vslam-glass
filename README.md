@@ -79,6 +79,10 @@ VSLAM requires to run in isaac_ros_common, which will automatically create and l
 ```
 cd {$REPO_DIR}
 cd isaac_ros_common/
+
+# isaac-ros-common uses git-lfs, ensure this is installed
+sudo apt-get install git-lfs && git lfs install && git lfs pull
+sudo nvidia-ctk cdi generate --mode=csv --output=/etc/cdi/nvidia.yaml
 ./scripts/run_dev.sh
 ```
 

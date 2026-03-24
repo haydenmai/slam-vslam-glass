@@ -6,8 +6,9 @@ To download/clone this repo, run either commands:
 ```
 # Download repo & submodules 
 git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git
+```
 
-# -------------------------------------------------------------------------
+```
 # Download the without submodules
 git clone git@github.com:haydenmai/slam-vslam-glass.git 
 

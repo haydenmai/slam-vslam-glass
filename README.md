@@ -78,7 +78,7 @@ xhost +si:localuser:root
 VSLAM requires to run in isaac_ros_common, which will automatically create and launch a docker image.
 ```
 cd {$REPO_DIR}
-cd isaac_ros_command/
+cd isaac_ros_common/
 ./scripts/run_dev.sh
 ```
 

@@ -1,7 +1,19 @@
 # SLAM/VSLAM in Glass Environments
 ## Overview
 
-## Misc.
+## Cloning this repository
+To download/clone this repo, run either commands:
+```
+# Download repo & submodules 
+git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git
+
+# -------------------------------------------------------------------------
+# Download the without submodules
+git clone git@github.com:haydenmai/slam-vslam-glass.git 
+
+# Run this in the future to get the submodules
+git submodule update --init --recursive 
+```
 
 ## Testing docker container
 ### Run script
@@ -52,4 +64,31 @@ ros2 run demo_nodes_cpp talker
 
 # anywhere else outside container or in another container
 ros2 run demo_nodes_cpp listener
+```
+
+## Running SLAM (+ Intensity Filter)
+
+## Running VSLAM
+To start, some commands are required to get the ZED cameras working:
+```
+xhost +si:localuser:root
+```
+
+VSLAM requires to run in isaac_ros_common, which will automatically create and launch a docker image.
+```
+cd {$REPO_DIR}
+cd isaac_ros_command/
+./scripts/run_dev.sh
+```
+
+In the docker image terminal, run:
+```
+cd /workspaces/isaac_ros-dev
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+export ISAAC_ROS_WS=/workspaces/isaac_ros-dev
+
+whoami
+ls -l /dev/nvmap
+echo $NVIDIA_VISIBLE_DEVICES
 ```

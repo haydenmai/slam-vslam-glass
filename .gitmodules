@@ -1,6 +1,6 @@
 [submodule "isaac_ros_common"]
 	path = isaac_ros_common
-	url = git@github.com:NVIDIA-ISAAC-ROS/isaac_ros_common.git
+	url = https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
 	branch = release-3.2
 [submodule "rs_driver"]
 	path = rs_driver

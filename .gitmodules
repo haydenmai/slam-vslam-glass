@@ -9,3 +9,6 @@
 	path = zed-ros2-interfaces
 	url = https://github.com/stereolabs/zed-ros2-interfaces.git
 	branch = humble
+[submodule "spark-fast-lio"]
+	path = spark-fast-lio
+	url = https://github.com/MIT-SPARK/spark-fast-lio.git

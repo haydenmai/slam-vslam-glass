@@ -5,3 +5,7 @@
 [submodule "rs_driver"]
 	path = rs_driver
 	url = https://github.com/RoboSense-LiDAR/rs_driver.git
+[submodule "zed-ros2-interfaces"]
+	path = zed-ros2-interfaces
+	url = https://github.com/stereolabs/zed-ros2-interfaces.git
+	branch = humble

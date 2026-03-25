@@ -17,6 +17,7 @@ git submodule update --init --recursive
 ```
 
 ## Running Turtlebot2 With ROS2
+### Setup
 Instructions are found in the [turtlebot2_ros2](https://github.com/idorobotics/turtlebot2_ros2.git) repository. For convenience, you can copy these commands:
 ```
 # dependencies
@@ -41,6 +42,22 @@ kobuki-version-info
 source install/setup.bash
 ```
 Check if `/dev/kobuki` exists before proceeding.
+
+### Run the Robot
+You can now run the turtlebot2! Either ssh into the jetson or connect a keyboard to the jetson usb port will work. Open 2 seperate terminals to begin.
+
+In terminal 1:
+```
+ros2 launch kobuki_node kobuki_node-launch.py
+cd ~/ros2_ws/
+source install/setup.bash
+```
+
+In terminal 2:
+```
+source /opt/ros/humble/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=commands/velocity
+```
 
 ### Troubleshooting
 If the `colcon build` command failed, it is likely that `empy` is incompatible:

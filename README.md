@@ -156,7 +156,6 @@ Setup and install dependencies
 sudo apt-get update
 sudo apt-get install -y ros-humble-isaac-ros-visual-slam ros-humble-isaac-ros-examples ros-humble-isaac-ros-stereo-image-proc ros-humble-isaac-ros-zed
 rosdep update && rosdep install --from-paths src/zed-ros2-wrapper --ignore-src -r -y && \
-colcon build --symlink-install --packages-up-to zed_wrapper
 source install/setup.bash
 ```
 

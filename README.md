@@ -2,7 +2,7 @@
 ## Overview
 
 ## Cloning this repository
-To download/clone this repo, run either commands:
+To download/clone this repo, run either set of commands:
 ```
 # Download repo & submodules 
 git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git
@@ -14,6 +14,46 @@ git clone git@github.com:haydenmai/slam-vslam-glass.git
 
 # Run this in the future to get the submodules
 git submodule update --init --recursive 
+```
+
+## Running Turtlebot2 With ROS2
+Instructions are found in the [turtlebot2_ros2](https://github.com/idorobotics/turtlebot2_ros2.git) repository. For convenience, you can copy these commands:
+```
+# dependencies
+sudo apt-get install ros-humble-kobuki-velocity-smoother ros-humble-sophus ros-humble-teleop-twist-keyboard ros-humble-joy-teleop ros-humble-teleop-twist-joy
+
+# Build the ROS2 drivers
+mkdir -p ros2_ws/src
+cd ros2_ws/src
+git clone --recursive https://github.com/idorobotics/turtlebot2_ros2.git
+cd ..
+rosdep install -i --from-path src --rosdistro humble -y
+colcon build --symlink-install --executor sequential
+
+# udev setup
+wget https://raw.githubusercontent.com/kobuki-base/kobuki_ftdi/devel/60-kobuki.rules
+sudo cp 60-kobuki.rules /etc/udev/rules.d
+sudo service udev reload
+sudo service udev restart
+
+# Check kobuki version
+kobuki-version-info
+source install/setup.bash
+```
+Check if `/dev/kobuki` exists before proceeding.
+
+### Troubleshooting
+If the `colcon build` command failed, it is likely that `empy` is incompatible:
+```
+pip uninstall empy
+pip install empy==3.3.4
+
+# rebuild
+colcon build --symlink-install --executor sequential \
+  --cmake-args \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+  -Wno-dev \
+  -DCMAKE_CXX_FLAGS="-Wno-error=class-memaccess"
 ```
 
 ## Running SLAM (+ Intensity Filter)

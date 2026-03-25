@@ -12,3 +12,6 @@
 [submodule "spark-fast-lio"]
 	path = spark-fast-lio
 	url = https://github.com/MIT-SPARK/spark-fast-lio.git
+[submodule "turtlebot2_ros2"]
+	path = turtlebot2_ros2
+	url = https://github.com/idorobotics/turtlebot2_ros2.git

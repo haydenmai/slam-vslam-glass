@@ -68,18 +68,25 @@ ros2 run demo_nodes_cpp listener
 
 ## Running VSLAM
 ### 1st Launch
-To start, some commands are required to get the ZED cameras working. VSLAM requires to be run in isaac_ros_common, which will automatically create and launch a docker image. **Note:** This only needs be run once, subsequent runs need a different set of commands.
+To start, we need to download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, which will automatically create and launch a docker image. **Note:** This only needs be run once, subsequent runs need a different set of commands.
 ```
 cd {$REPO_DIR}
 cd isaac_ros_common/
+
+# ZED ROS2 Wrapper
+mkdir src
+cd src
+git clone --recurse-submodules https://github.com/stereolabs/zed-ros2-wrapper -b humble-v4.2.5
 
 # isaac-ros-common uses git-lfs, ensure this is installed
 sudo apt-get install git-lfs && git lfs install && git lfs pull
 sudo nvidia-ctk cdi generate --mode=csv --output=/etc/cdi/nvidia.yaml
 ./scripts/run_dev.sh
 ```
+This will download the necessary docker image and will automatically launch.
 
 #### Install ZED SDK in Docker
+Now that you are in the Docker terminal, we can begin installing libraries and build ROS 
 ```
 # Install ZED SDK in ROS
 sudo chmod +x docker/scripts/install-zed-aarch64.sh 
@@ -94,11 +101,6 @@ Verify the ZED SDK is successfully installed
 
 #### Download & Build ROS2 ZED Wrapper
 ```
-# ROS2 Wrapper
-mkdir src
-cd /workspaces/isaac_ros-dev/src
-git clone --recurse-submodules https://github.com/stereolabs/zed-ros2-wrapper -b humble-v4.2.5
-
 # Build ROS2 wrapper
 cd ${ISAAC_ROS_WS} && \
 sudo apt update
@@ -152,8 +154,7 @@ Setup and install dependencies
 ./docker/scripts/install-zed-aarch64.sh 
 
 sudo apt-get update
-sudo apt-get install -y ros-humble-isaac-ros-visual-slam
-sudo apt-get install -y ros-humble-isaac-ros-examples ros-humble-isaac-ros-stereo-image-proc ros-humble-isaac-ros-zed
+sudo apt-get install -y ros-humble-isaac-ros-visual-slam ros-humble-isaac-ros-examples ros-humble-isaac-ros-stereo-image-proc ros-humble-isaac-ros-zed
 rosdep update && rosdep install --from-paths src/zed-ros2-wrapper --ignore-src -r -y && \
 colcon build --symlink-install --packages-up-to zed_wrapper
 source install/setup.bash
@@ -166,6 +167,7 @@ launch_fragments:=zed_stereo_rect,visual_slam pub_frame_rate:=30.0 \
 base_frame:=zed2_camera_center camera_optical_frames:="['zed2_left_camera_optical_frame', 'zed2_right_camera_optical_frame']" \
 interface_specs_file:=${ISAAC_ROS_WS}/isaac_ros_assets/isaac_ros_visual_slam/zed2_quickstart_interface_specs.json
 ```
+
 #### Visualizing with RViz
 On another terminal, run:
 ```

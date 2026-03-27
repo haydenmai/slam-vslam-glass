@@ -3,6 +3,9 @@ services:
     build:
       context: ./docker-jetson        # where to look for files (entrypoint.sh etc.)
       dockerfile: Dockerfile
+      args:
+        RSLIDAR_SDK_REF: ${RSLIDAR_SDK_REF:-main}
+        RSLIDAR_MSG_REF: ${RSLIDAR_MSG_REF:-main}
     container_name: ros2_humble_jetson
     network_mode: host
     runtime: nvidia

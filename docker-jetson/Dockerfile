@@ -3,6 +3,8 @@ FROM dustynv/ros:humble-ros-base-l4t-r36.2.0
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DISTRO=humble
 ENV ROS_DOMAIN_ID=0
+ARG RSLIDAR_SDK_REF=main
+ARG RSLIDAR_MSG_REF=main
 
 # --- User setup ---
 ARG UID=1000
@@ -37,6 +39,12 @@ RUN rm -f /usr/share/keyrings/ros-archive-keyring.gpg && \
 
 # --- ROS2 packages ---
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    git \
+    libeigen3-dev \
+    libpcap-dev \
+	libyaml-cpp-dev \
     python3-pip \
     python3-colcon-common-extensions \
     python3-rosdep \
@@ -55,6 +63,16 @@ RUN mkdir -p $HOME/.ros/log && \
 # --- rosdep ---
 RUN rosdep init 2>/dev/null || true && rosdep update
 
+# --- RoboSense SDK (ROS2 colcon build) ---
+RUN mkdir -p /opt/rslidar_ws/src && \
+    git clone --depth 1 --branch ${RSLIDAR_SDK_REF} https://github.com/RoboSense-LiDAR/rslidar_sdk.git /opt/rslidar_ws/src/rslidar_sdk && \
+    cd /opt/rslidar_ws/src/rslidar_sdk && \
+    git submodule init && \
+    git submodule update --recursive && \
+    git clone --depth 1 --branch ${RSLIDAR_MSG_REF} https://github.com/RoboSense-LiDAR/rslidar_msg.git /opt/rslidar_ws/src/rslidar_msg && \
+    bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && cd /opt/rslidar_ws && colcon build --symlink-install" && \
+    rm -rf /opt/rslidar_ws/build /opt/rslidar_ws/log
+
 # --- Entrypoint script ---
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -68,6 +86,7 @@ SHELL ["/bin/bash", "-l", "-c"]
 
 # --- Environment ---
 RUN echo "source \$ROS_ROOT/install/setup.bash" >> ~/.bashrc && \
+    echo "source /opt/rslidar_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source ~/ros2_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc && \
     echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc && \

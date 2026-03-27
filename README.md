@@ -86,9 +86,46 @@ colcon build --symlink-install --executor sequential \
 ./start.sh jetson down        # stop the container
 ./start.sh jetson restart     # stop and restart
 ```
+
+### RoboSense SDK clone flow (official)
+`rslidar_sdk` includes `rs_driver` as a git submodule.
+Use the official setup sequence:
+```
+git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
+cd rslidar_sdk
+git submodule init
+git submodule update
+```
+
+For ROS2, `rslidar_sdk` also requires `rslidar_msg` in the workspace `src` folder.
+
+The Jetson Docker image now follows the ROS2 colcon flow during build:
+
+1. Clone `rslidar_sdk`
+2. Initialize/update its `rs_driver` submodule
+3. Clone `rslidar_msg`
+4. Build in `/opt/rslidar_ws` using `colcon build`
+
+Build with default SDK ref:
+```
+./start-container.sh jetson build
+```
+
+Build with specific SDK/message branch or tag:
+```
+docker compose -f docker-compose.jetson.yml build \
+    --build-arg RSLIDAR_SDK_REF=main \
+    --build-arg RSLIDAR_MSG_REF=main
+```
+
+After launching the container, run:
+```
+ros2 launch rslidar_sdk start.py
+```
+
 ### Export variables for Jetson
 ```
-# In terminal:
+# In terminal (outside of container)
 export ROS_DOMAIN_ID=0
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ```
@@ -106,7 +143,11 @@ ros2 run demo_nodes_cpp talker
 # terminal 2 — open second shell into same container
 docker compose -f docker-compose.jetson.yml exec ros2 bash
 ros2 run demo_nodes_cpp listener
+
+# lidar drivers check
+ldconfig -p | grep rs_driver
 ```
+
 
 ### Topics
 ```

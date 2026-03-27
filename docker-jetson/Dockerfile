@@ -71,7 +71,8 @@ RUN mkdir -p /opt/rslidar_ws/src && \
     git submodule init && \
     git submodule update --recursive && \
     git clone --depth 1 --branch ${RSLIDAR_MSG_REF} https://github.com/RoboSense-LiDAR/rslidar_msg.git /opt/rslidar_ws/src/rslidar_msg && \
-    bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && cd /opt/rslidar_ws && colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev" && \
+    bash -c "set -e; source /opt/ros/${ROS_DISTRO}/setup.bash; cd /opt/rslidar_ws; colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev 2>&1 | tail -100" && \
+    chown -R $USERNAME:$USERNAME /opt/rslidar_ws && \
     rm -rf /opt/rslidar_ws/build /opt/rslidar_ws/log
 
 # --- Entrypoint script ---

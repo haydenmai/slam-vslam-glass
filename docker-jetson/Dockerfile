@@ -57,6 +57,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-dev-tools \
     && rm -rf /var/lib/apt/lists/*
 
+# Some Jetson ROS images split files between /opt/ros/<distro>/share and
+# /opt/ros/<distro>/install/share. Ensure rosidl cpp templates are reachable.
+RUN mkdir -p /opt/ros/${ROS_DISTRO}/install/share/rosidl_generator_cpp && \
+    if [ ! -e /opt/ros/${ROS_DISTRO}/install/share/rosidl_generator_cpp/resource ] && \
+       [ -d /opt/ros/${ROS_DISTRO}/share/rosidl_generator_cpp/resource ]; then \
+      ln -s /opt/ros/${ROS_DISTRO}/share/rosidl_generator_cpp/resource \
+            /opt/ros/${ROS_DISTRO}/install/share/rosidl_generator_cpp/resource; \
+    fi
+
 # --- Log directory ---
 RUN mkdir -p $HOME/.ros/log && \
 	chown -R $USERNAME:$USERNAME $HOME/.ros
@@ -86,6 +95,7 @@ SHELL ["/bin/bash", "-l", "-c"]
 
 # --- Environment ---
 RUN echo "source \$ROS_ROOT/install/setup.bash" >> ~/.bashrc && \
+    echo "source /opt/ros/${ROS_DISTRO}/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source /opt/rslidar_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source ~/ros2_ws/install/setup.bash 2>/dev/null || true" >> ~/.bashrc && \
     echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc && \

@@ -101,7 +101,8 @@ The Jetson Docker image clones `rslidar_sdk` and `rslidar_msg` but defers the co
 
 2. Build rslidar_sdk in the container:
 ```bash
-source /opt/ros/humble/setup.bash
+unset AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH
+source /opt/ros/humble/install/setup.bash
 cd /opt/rslidar_ws
 colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev
 ```

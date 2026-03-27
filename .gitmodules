@@ -2,9 +2,6 @@
 	path = isaac_ros_common
 	url = https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
 	branch = release-3.2
-[submodule "rs_driver"]
-	path = rs_driver
-	url = https://github.com/RoboSense-LiDAR/rs_driver.git
 [submodule "zed-ros2-interfaces"]
 	path = zed-ros2-interfaces
 	url = https://github.com/stereolabs/zed-ros2-interfaces.git
@@ -15,3 +12,6 @@
 [submodule "turtlebot2_ros2"]
 	path = turtlebot2_ros2
 	url = https://github.com/idorobotics/turtlebot2_ros2.git
+[submodule "rslidar_sdk"]
+	path = rslidar_sdk
+	url = https://github.com/RoboSense-LiDAR/rslidar_sdk.git

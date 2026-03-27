@@ -87,40 +87,45 @@ colcon build --symlink-install --executor sequential \
 ./start.sh jetson restart     # stop and restart
 ```
 
-### RoboSense SDK clone flow (official)
-`rslidar_sdk` includes `rs_driver` as a git submodule.
-Use the official setup sequence:
+### RoboSense SDK - Build at Runtime
+
+The Jetson Docker image clones `rslidar_sdk` and `rslidar_msg` but defers the colcon build to runtime for better error visibility.
+
+**First time only: Build the SDK inside the container**
+
+1. Start the container:
 ```
-git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
-cd rslidar_sdk
-git submodule init
-git submodule update
-```
-
-For ROS2, `rslidar_sdk` also requires `rslidar_msg` in the workspace `src` folder.
-
-The Jetson Docker image now follows the ROS2 colcon flow during build:
-
-1. Clone `rslidar_sdk`
-2. Initialize/update its `rs_driver` submodule
-3. Clone `rslidar_msg`
-4. Build in `/opt/rslidar_ws` using `colcon build`
-
-Build with default SDK ref:
-```
-./start-container.sh jetson build
+./start-container.sh jetson up
+./start-container.sh jetson shell
 ```
 
-Build with specific SDK/message branch or tag:
+2. Build rslidar_sdk in the container:
+```bash
+source /opt/ros/humble/setup.bash
+cd /opt/rslidar_ws
+colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev
+```
+
+3. Source the built packages:
+```bash
+source /opt/rslidar_ws/install/setup.bash
+```
+
+4. Verify and launch:
+```bash
+ros2 pkg list | grep rslidar
+ros2 launch rslidar_sdk start.py
+```
+
+**Subsequent launches: Auto-source**
+
+The `.bashrc` is already configured to source `/opt/rslidar_ws/install/setup.bash`, so in future shells it will be available automatically.
+
+To rebuild with specific SDK/message branch:
 ```
 docker compose -f docker-compose.jetson.yml build \
-    --build-arg RSLIDAR_SDK_REF=main \
-    --build-arg RSLIDAR_MSG_REF=main
-```
-
-After launching the container, run:
-```
-ros2 launch rslidar_sdk start.py
+    --build-arg RSLIDAR_SDK_REF=<tag-or-branch> \
+    --build-arg RSLIDAR_MSG_REF=<tag-or-branch>
 ```
 
 ### Export variables for Jetson

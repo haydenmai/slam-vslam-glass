@@ -91,15 +91,20 @@ colcon build --symlink-install --executor sequential \
 
 The Jetson Docker image clones `rslidar_sdk` and `rslidar_msg` but defers the colcon build to runtime for better error visibility.
 
-**First time only: Build the SDK inside the container**
+Ensure that the lidar is connected. Set IP for lidar & check packets are reaching Jetson/container network:
+```bash
+ip a # Check where lidar is coming from
+sudo ip addr add 192.168.1.102/24 dev eno1
+sudo tcpdump -ni any udp port 6699 or udp port 7788
+```
 
-1. Start the container:
+Start the container:
 ```
 ./start-container.sh jetson up
 ./start-container.sh jetson shell
 ```
 
-2. Build rslidar_sdk in the container:
+Build rslidar_sdk in the container:
 ```bash
 unset AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH
 source /opt/ros/humble/install/setup.bash
@@ -115,26 +120,38 @@ source /opt/rslidar_ws/install/setup.bash
 4. Verify and launch:
 ```bash
 ros2 pkg list | grep rslidar
-ros2 launch rslidar_sdk start.py
+ros2 launch rslidar_sdk start.py # Also launches RViz
 ```
 
-**Subsequent launches: Auto-source**
-
-The `.bashrc` is already configured to source `/opt/rslidar_ws/install/setup.bash`, so in future shells it will be available automatically.
-
-To rebuild with specific SDK/message branch:
-```
-docker compose -f docker-compose.jetson.yml build \
-    --build-arg RSLIDAR_SDK_REF=<tag-or-branch> \
-    --build-arg RSLIDAR_MSG_REF=<tag-or-branch>
+If launch fails with `package 'rviz2' not found`, run driver-only (no RViz):
+```bash
+source /opt/rslidar_ws/install/setup.bash
+ros2 run rslidar_sdk rslidar_sdk_node --ros-args -p config_path:=/opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
 ```
 
-### Export variables for Jetson
-```
-# In terminal (outside of container)
+Point cloud topic is `/rslidar_points` (not `/points`):
+```bash
+source /opt/ros/humble/setup.bash
+source /opt/rslidar_ws/install/setup.bash
 export ROS_DOMAIN_ID=0
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+#export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+ros2 topic list | grep -E "rslidar|point|scan"
+ros2 topic hz /rslidar_points
 ```
+
+If you see `ERRCODE_MSOPTIMEOUT`, the node is running but not receiving UDP packets from the lidar.
+For RS-LiDAR-AIRY, edit config and set:
+```yaml
+lidar:
+    - driver:
+            lidar_type: RSAIRY
+            msop_port: 6699
+            difop_port: 7788
+            host_address: 0.0.0.0
+            group_address: 0.0.0.0
+```
+
 ### Verify
 ```
 printenv ROS_DISTRO
@@ -149,11 +166,7 @@ ros2 run demo_nodes_cpp talker
 # terminal 2 — open second shell into same container
 docker compose -f docker-compose.jetson.yml exec ros2 bash
 ros2 run demo_nodes_cpp listener
-
-# lidar drivers check
-ldconfig -p | grep rs_driver
 ```
-
 
 ### Topics
 ```

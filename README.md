@@ -1,11 +1,11 @@
 # SLAM/VSLAM in Glass Environments
 ## Our Team! 
-| Team Member     | Role                                |
-| --------------- | ----------------------------------- |
-| April Nguyen    | SLAM & Filter                       |
-| Kaiden Palmers  | SLAM & Filter                       |
-| Michael Chandra | Hardware Setup & VSLAM              |
-| Hayden Mai      | Hardware & Software Setup		    |
+| Team Member     | Role                      | Contact 				  |
+| --------------- | ------------------------- | ---------------------- |
+| April Nguyen    | SLAM & Filter             | axn@sfu.ca			  |
+| Kaiden Palmers  | SLAM & Filter             | kaiden_palmer@sfu.ca   |
+| Michael Chandra | Hardware Setup & VSLAM    | michael_chandra@sfu.ca |
+| Hayden Mai      | Hardware & Software Setup | hgm2@sfu.ca 			  |
 
 ## Overview
 `slam-vslam-glass` attempts to recreate glass detection in environments using papers (sources needed) using SLAM and Visual SLAM.
@@ -21,6 +21,7 @@ This repository also contains a list of guides found in the `setup-guide` folder
 
 ## Cloning this repository
 To download/clone this repo, run either set of commands:
+
 ### Download repo & submodules 
 ```
 git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git

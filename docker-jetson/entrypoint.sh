@@ -6,6 +6,7 @@ elif [ -f "/opt/ros/${ROS_DISTRO:-humble}/install/setup.bash" ]; then
 elif [ -f "/opt/ros/${ROS_DISTRO:-humble}/setup.bash" ]; then
 	source "/opt/ros/${ROS_DISTRO:-humble}/setup.bash"
 fi
+source /opt/rslidar_ws/install/setup.bash 2>/dev/null || true
 source ~/ros2_ws/install/setup.bash 2>/dev/null || true
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export ROS_DOMAIN_ID=0

@@ -73,13 +73,17 @@ RUN mkdir -p $HOME/.ros/log && \
 # --- rosdep ---
 RUN rosdep init 2>/dev/null || true && rosdep update
 
-# --- RoboSense SDK (sources only, build at runtime) ---
+# --- RoboSense SDK (clone and build in image) ---
 RUN mkdir -p /opt/rslidar_ws/src && \
     git clone --depth 1 --branch ${RSLIDAR_SDK_REF} https://github.com/RoboSense-LiDAR/rslidar_sdk.git /opt/rslidar_ws/src/rslidar_sdk && \
     cd /opt/rslidar_ws/src/rslidar_sdk && \
     git submodule init && \
     git submodule update --recursive && \
     git clone --depth 1 --branch ${RSLIDAR_MSG_REF} https://github.com/RoboSense-LiDAR/rslidar_msg.git /opt/rslidar_ws/src/rslidar_msg && \
+    unset AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH && \
+    source /opt/ros/${ROS_DISTRO}/install/setup.bash && \
+    cd /opt/rslidar_ws && \
+    colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev && \
     chown -R $USERNAME:$USERNAME /opt/rslidar_ws
 
 # --- Entrypoint script ---

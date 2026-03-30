@@ -2,19 +2,18 @@
 ## Run container script
 ```
 # build and start
-./start.sh jetson up
+./start-container.sh jetson up
 
 # other commands
-./start.sh jetson build       # build only
-./start.sh jetson shell       # open a shell inside the container
-./start.sh jetson logs        # follow logs
-./start.sh jetson down        # stop the container
-./start.sh jetson restart     # stop and restart
+./start-container.sh jetson build       # build only
+./start-container.sh jetson shell       # open a shell inside the container
+./start-container.sh jetson logs        # follow logs
+./start-container.sh jetson down        # stop the container
+./start-container.sh jetson restart     # stop and restart
 ```
 
-## RoboSense SDK - Build at Runtime
-
-The Jetson Docker image clones `rslidar_sdk` and `rslidar_msg` but defers the colcon build to runtime for better error visibility.
+## RoboSense SDK - Automated in Docker Build
+The Jetson Docker image now clones and builds `rslidar_sdk` and `rslidar_msg` during `docker compose build`, so you do not need to run the colcon build steps manually each time. The following instructions are to support if the lidar doesn't work afterwards.
 
 Ensure that the lidar is connected. Set IP for lidar & check packets are reaching Jetson/container network:
 ```bash

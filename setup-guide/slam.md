@@ -19,10 +19,11 @@ Ensure that the lidar is connected. Set IP for lidar & check packets are reachin
 ```bash
 ip a # Check where lidar is coming from
 sudo ip addr add 192.168.1.102/24 dev eno1
-sudo tcpdump -ni any udp port 6699 or udp port 7788
+
+# Run to check if data is being received
+#sudo tcpdump -ni any udp port 6699 or udp port 7788
 ```
 
-### Start ROS Node
 Start the container:
 ```
 ./start-container.sh jetson up
@@ -60,13 +61,14 @@ ros2 run rslidar_sdk rslidar_sdk_node --ros-args -p config_path:=/opt/rslidar_ws
 ```
 
 ### Check Topic
-Point cloud topic is `/rslidar_points` (not `/points`):
+In another terminal/container shell, you can check if the node is publishing to the point cloud topic `/rslidar_points`. 
 ```bash
 ros2 topic list | grep -E "rslidar|point|scan"
 ros2 topic hz /rslidar_points
 ```
 
 ## ROS2 Verification Commands
+Below are a list of commands to check if ROS2 is properly installed in the Docker container.
 ```
 printenv ROS_DISTRO
 # expected: humble
@@ -82,13 +84,13 @@ docker compose -f docker-compose.jetson.yml exec ros2 bash
 ros2 run demo_nodes_cpp listener
 ```
 
-## Topics
+### Topics
 ```
 ros2 topic list
 # expected: /chatter, /rosout, /parameter_events
 ```
 
-## Verify Topics Outside Containers
+### Verify Topics Outside Containers
 ```
 # anywhere else outside container or in another container
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp

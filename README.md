@@ -1,30 +1,40 @@
 # SLAM/VSLAM in Glass Environments
+## Our Team! 
+| Team Member     | Role                                |
+| --------------- | ----------------------------------- |
+| April Nguyen    | SLAM & Filter                       |
+| Kaiden Palmers  | SLAM & Filter                       |
+| Michael Chandra | Hardware Setup & VSLAM              |
+| Hayden Mai      | Hardware & Software Setup		    |
+
 ## Overview
-`slam-vslam-glass` attempts to recreate glass detection in the environment using papers (sources needed) using SLAM and Visual SLAM. 
+`slam-vslam-glass` attempts to recreate glass detection in environments using papers (sources needed) using SLAM and Visual SLAM.
 
 ### Our Hardware
-- Jetson Orin NX (JetPack 6.2.2)
+- Jetson Orin NX 16GB (JetPack 6.2.2)
 - RoboSense Airy Lidar 
 - StereoLabs ZED Stereo Camera
 - Kobuki Turtlebot 2
 
 ### Guides
-This repository also contains a list of guides found in the `setup-guide` folder to help setup SLAM & VSLAM on the Jetson Orin NX (16GB). 
+This repository also contains a list of guides found in the `setup-guide` folder to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
 
 ## Cloning this repository
 To download/clone this repo, run either set of commands:
+### Download repo & submodules 
 ```
-# Download repo & submodules 
 git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git
 ```
 
+### Download without submodules
 ```
-# Download the without submodules
 git clone git@github.com:haydenmai/slam-vslam-glass.git 
 
 # Run this in the future to get the submodules
 git submodule update --init --recursive 
 ```
+
+## Directory
 
 ## References
 references needed

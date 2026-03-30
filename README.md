@@ -1,10 +1,10 @@
 # SLAM/VSLAM in Glass Environments
 ## Our Team! 
 | Team Member     | Role                      | Contact 				  |
-| --------------- | ------------------------- | ---------------------- |
-| April Nguyen    | SLAM & Filter             | axn@sfu.ca			  |
-| Kaiden Palmers  | SLAM & Filter             | kaiden_palmer@sfu.ca   |
-| Michael Chandra | Hardware Setup & VSLAM    | michael_chandra@sfu.ca |
+| --------------- | ------------------------- | ------------------------- |
+| April Nguyen    | SLAM & Filter             | axn@sfu.ca			      |
+| Kaiden Palmers  | SLAM & Filter             | kaiden_palmer@sfu.ca      |
+| Michael Chandra | Hardware Setup & VSLAM    | michael_chandra@sfu.ca    |
 | Hayden Mai      | Hardware & Software Setup | hgm2@sfu.ca 			  |
 
 ## Overview
@@ -38,4 +38,12 @@ git submodule update --init --recursive
 ## Directory
 
 ## References
+### Papers
 references needed
+
+### Repositories
+- [turtlebot2_ros2](https://github.com/idorobotics/turtlebot2_ros2.git) - Turtlebot 2 ROS2 packages
+- [zed-ros2-interfaces](https://github.com/stereolabs/zed-ros2-interfaces.git) - StereoLabs ZED camera ROS2 interfaces
+- [isaac_ros_common](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git) - NVIDIA Isaac ROS common utilities
+- [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk.git) - RoboSense LiDAR SDK
+- [spark-fast-lio](https://github.com/MIT-SPARK/spark-fast-lio.git) - MIT Spark Fast LIO (LIDAR-Inertial Odometry)

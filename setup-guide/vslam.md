@@ -69,7 +69,6 @@ cd isaac_ros_common/
 rviz2 -d $(ros2 pkg prefix isaac_ros_visual_slam --share)/rviz/default.cfg.rviz
 ```
 
----
 ## Subsequent Launches
 Once you run through the 1st launcher instructions, files are already downloaded into the image. As a result, future launches of isaac-ros-common only requires installing ZED SDKs and dependencies, as well as building the wrapper.
 
@@ -79,6 +78,7 @@ cd {$REPO_DIR}
 cd isaac_ros_common/
 ./scripts/run_dev.sh
 ```
+
 ### In Docker
 Setup and install dependencies
 ```

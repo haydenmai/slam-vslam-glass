@@ -1,4 +1,6 @@
 # Running Turtlebot2 With ROS2
+Turtlebot2 requires a few drivers to be installed before running, feel free to either install this on the Jetson image or in a Docker container (not tested).
+
 ## Setup
 Instructions are found in the [turtlebot2_ros2](https://github.com/idorobotics/turtlebot2_ros2.git) repository. For convenience, you can copy these commands:
 ```

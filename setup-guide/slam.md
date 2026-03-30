@@ -1,5 +1,6 @@
 # Running SLAM (+ Intensity Filter)
-## Run container script
+## Container Script
+You can run this script to build and bring up the Jetson's Docker container. **Note**: The shell script was also used with Raspberry Pi 5 for initial testing, hence the `jetson` argument is needed for the script to work.
 ```
 # build and start
 ./start-container.sh jetson up
@@ -54,7 +55,7 @@ ros2 launch rslidar_sdk start.py
 ```
 
 ### Launch Lidar Node (w/o RViz)
-If launch fails with `package 'rviz2' not found`, run driver-only (no RViz):
+If launch fails with `package 'rviz2' not found` or you are currently using `ssh`, run driver-only (no RViz):
 ```bash
 source /opt/rslidar_ws/install/setup.bash
 ros2 run rslidar_sdk rslidar_sdk_node --ros-args -p config_path:=/opt/rslidar_ws/src/rslidar_sdk/config/config.yaml

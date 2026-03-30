@@ -1,7 +1,7 @@
 services:
   ros2:
     build:
-      context: ./docker-pi        # where to look for files (entrypoint.sh etc.)
+      context: .                  # compose file lives in docker-pi/
       dockerfile: Dockerfile
     container_name: ros2_humble_pi
     network_mode: host
@@ -10,8 +10,8 @@ services:
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - CYCLONEDDS_URI=file:///home/linda/cyclone_dds.xml
     volumes:
-      - ./src:/home/linda/ros2_ws/src
-      - ./cyclone_dds.xml:/home/linda/cyclone_dds.xml
+      - ../src:/home/linda/ros2_ws/src
+      - ../cyclone_dds.xml:/home/linda/cyclone_dds.xml
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0       # USB-serial
       - /dev/ttyAMA0:/dev/ttyAMA0       # Pi UART

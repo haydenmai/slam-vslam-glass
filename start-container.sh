@@ -35,10 +35,10 @@ COMMAND=$2
 # set compose file based on platform
 case $PLATFORM in
     jetson)
-        COMPOSE_FILE="docker-compose.jetson.yml"
+        COMPOSE_FILE="docker-jetson/docker-compose.yml"
         ;;
     pi)
-        COMPOSE_FILE="docker-compose.pi.yml"
+        COMPOSE_FILE="docker-pi/docker-compose.yml"
         ;;
     *)
         echo "Error: Unknown platform '$PLATFORM'. Use 'jetson' or 'pi'."

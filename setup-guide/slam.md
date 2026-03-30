@@ -16,7 +16,7 @@ You can run this script to build and bring up the Jetson's Docker container. **N
 ## RoboSense SDK Setup
 The Jetson Docker image clones and builds `rslidar_sdk` and `rslidar_msg` during `docker compose build`, so you do not need to run the colcon build steps manually each time. Previous commits of this file contains manual methods to install the SDK within the container if things go wrong.
 
-Ensure that the lidar is connected. Set IP for lidar & check packets are reaching Jetson/container network:
+Ensure that the lidar is connected. Check & Set IP for lidar & check packets are reaching Jetson/container network. You can set this to be permanent using Ubuntu's `Settings`->`Network` and configure a static IP address. 
 ```bash
 ip a # Check where lidar is coming from
 sudo ip addr add 192.168.1.102/24 dev eno1
@@ -81,7 +81,7 @@ echo $RMW_IMPLEMENTATION
 ros2 run demo_nodes_cpp talker
 
 # terminal 2 — open second shell into same container
-docker compose -f docker-compose.jetson.yml exec ros2 bash
+docker compose -f docker-jetson/docker-compose.yml exec ros2 bash
 ros2 run demo_nodes_cpp listener
 ```
 

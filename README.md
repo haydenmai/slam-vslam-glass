@@ -43,7 +43,7 @@ references needed
 
 ### Repositories
 - [turtlebot2_ros2](https://github.com/idorobotics/turtlebot2_ros2.git) - Turtlebot 2 ROS2 packages
-- [zed-ros2-interfaces](https://github.com/stereolabs/zed-ros2-interfaces.git) - StereoLabs ZED camera ROS2 interfaces
+- [zed-ros2-wrapper](https://github.com/stereolabs/zed-ros2-wrapper.git) - StereoLabs ZED camera ROS2 interfaces
 - [isaac_ros_common](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git) - NVIDIA Isaac ROS common utilities
 - [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk.git) - RoboSense LiDAR SDK
 - [spark-fast-lio](https://github.com/MIT-SPARK/spark-fast-lio.git) - MIT Spark Fast LIO (LIDAR-Inertial Odometry)

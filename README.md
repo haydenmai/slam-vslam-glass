@@ -2,8 +2,8 @@
 ## Our Team! 
 | Team Member     | Role                      | Contact 				  |
 | --------------- | ------------------------- | ------------------------- |
-| April Nguyen    | SLAM & Filter             | axn@sfu.ca			      |
-| Kaiden Palmers  | SLAM & Filter             | kaiden_palmer@sfu.ca      |
+| April Nguyen    | SLAM & Glass Filter       | axn@sfu.ca			      |
+| Kaiden Palmers  | SLAM & Glass Filter       | kaiden_palmer@sfu.ca      |
 | Michael Chandra | Hardware Setup & VSLAM    | michael_chandra@sfu.ca    |
 | Hayden Mai      | Hardware & Software Setup | hgm2@sfu.ca 			  |
 

@@ -9,6 +9,7 @@ fi
 source /opt/rslidar_ws/install/setup.bash 2>/dev/null || true
 source ~/ros2_ws/install/setup.bash 2>/dev/null || true
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+#export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 export ROS_DOMAIN_ID=0
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH

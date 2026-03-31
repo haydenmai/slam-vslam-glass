@@ -71,8 +71,10 @@ if [ ! -d src/zed-ros2-wrapper ]; then
   exit 1
 fi
 
+set +u
 source /opt/ros/humble/setup.bash
 source install/setup.bash 2>/dev/null || true
+set -u
 
 echo "[container] Environment ready."
 echo "[container] You are now in ${ISAAC_ROS_WS}."
@@ -99,9 +101,13 @@ REBUILD_CMD=""
 if [[ ${DO_REBUILD} -eq 1 ]]; then
   read -r -d '' REBUILD_CMD <<'EOF' || true
 echo "[container] Rebuilding zed_wrapper..."
+set +u
 source /opt/ros/humble/setup.bash
+set -u
 colcon build --symlink-install --packages-up-to zed_wrapper
+set +u
 source install/setup.bash
+set -u
 EOF
 fi
 
@@ -111,13 +117,28 @@ if [[ ${DO_REBUILD} -eq 1 ]]; then
   FULL_CMD+="${REBUILD_CMD}"
 fi
 
+CONTAINER_SCRIPT_HOST_PATH="${ISAAC_DIR}/.vslam_subsequent_cmd.sh"
+
+run_container_script() {
+  local cmd_content="$1"
+
+  cat > "${CONTAINER_SCRIPT_HOST_PATH}" <<'EOF'
+#!/bin/bash
+EOF
+  printf "%s\n" "${cmd_content}" >> "${CONTAINER_SCRIPT_HOST_PATH}"
+  chmod +x "${CONTAINER_SCRIPT_HOST_PATH}"
+
+  # Use a single-token command string to avoid run_dev.sh splitting multiline -lc args.
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc '${ISAAC_ROS_WS}/.vslam_subsequent_cmd.sh'
+}
+
 if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 0 ]]; then
   if [[ ${DO_REBUILD} -eq 1 ]]; then
     echo "[host] Rebuild requested: zed_wrapper will be built before opening shell."
   fi
   echo "[host] Starting/attaching isaac_ros_common dev container shell..."
   FULL_CMD+=$'\nexec bash'
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
+  run_container_script "${FULL_CMD}"
   exit 0
 fi
 
@@ -128,7 +149,7 @@ if [[ ${DO_LAUNCH} -eq 1 && ${DO_RVIZ} -eq 0 ]]; then
   echo "[host] Starting/attaching container and launching VSLAM..."
   FULL_CMD+=$'\n'
   FULL_CMD+="${LAUNCH_CMD}"
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
+  run_container_script "${FULL_CMD}"
   exit 0
 fi
 
@@ -139,7 +160,7 @@ if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 1 ]]; then
   echo "[host] Starting/attaching container and launching rviz2..."
   FULL_CMD+=$'\n'
   FULL_CMD+="${RVIZ_CMD}"
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
+  run_container_script "${FULL_CMD}"
   exit 0
 fi
 

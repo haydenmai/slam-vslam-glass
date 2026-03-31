@@ -44,12 +44,14 @@ set -euo pipefail
 cd "${ISAAC_ROS_WS}"
 
 sanitize_apt_sources() {
-  # Some base images include a Yarn repo without a valid key, which can block apt-get update.
+  # Yarn is not required for this VSLAM flow; disable it to avoid apt signature failures.
   if [ -f /etc/apt/sources.list.d/yarn.list ] || [ -f /etc/apt/sources.list.d/yarn.sources ]; then
-    if ! apt-key list 2>/dev/null | grep -q '62D54FD4003F6525'; then
-      echo "[container] Disabling invalid Yarn APT source(s) (missing key 62D54FD4003F6525)"
-      [ -f /etc/apt/sources.list.d/yarn.list ] && sudo mv /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list.disabled
-      [ -f /etc/apt/sources.list.d/yarn.sources ] && sudo mv /etc/apt/sources.list.d/yarn.sources /etc/apt/sources.list.d/yarn.sources.disabled
+    echo "[container] Disabling Yarn APT source(s) for reliable apt updates"
+    if [ -f /etc/apt/sources.list.d/yarn.list ]; then
+      sudo mv -f /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list.disabled || true
+    fi
+    if [ -f /etc/apt/sources.list.d/yarn.sources ]; then
+      sudo mv -f /etc/apt/sources.list.d/yarn.sources /etc/apt/sources.list.d/yarn.sources.disabled || true
     fi
   fi
 }

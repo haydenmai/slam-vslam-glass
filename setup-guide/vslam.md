@@ -51,7 +51,7 @@ Options:
 ./vslam_subsequent_launch.sh --rviz
 ```
 
-### Troubleshooting
+## Troubleshooting
 If you ran `vslam_first_launch.sh` and compiling or launch issues occur, it may be missing the quickstart assets:
 ```
 # Libraries

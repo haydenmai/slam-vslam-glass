@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-    echo "Usage: ./start-container.sh [build|up|down|restart|logs|shell]"
+    echo "Usage: ./slam_launch.sh [build|up|down|restart|logs|shell]"
     echo ""
     echo "  Commands:"
     echo "    build     - Build the Docker image"
@@ -14,9 +14,9 @@ usage() {
     echo "    shell     - Open a shell inside the running container"
     echo ""
     echo "  Examples:"
-    echo "    ./start-container.sh up"
-    echo "    ./start-container.sh build"
-    echo "    ./start-container.sh shell"
+    echo "    ./slam_launch.sh up"
+    echo "    ./slam_launch.sh build"
+    echo "    ./slam_launch.sh shell"
     exit 1
 }
 
@@ -51,7 +51,7 @@ case $COMMAND in
         docker compose -f $COMPOSE_FILE up -d
         echo ""
         echo "Container started. To open a shell run:"
-        echo "  ./start-container.sh shell"
+        echo "  ./slam_launch.sh shell"
         ;;
     down)
         echo "Stopping container..."

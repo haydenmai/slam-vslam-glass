@@ -3,14 +3,14 @@
 You can run this script to build and bring up the Docker container.
 ```
 # build and start
-./start-container.sh jetson up
+./slam_launch.sh up
 
 # other commands
-./start-container.sh jetson build       # build only
-./start-container.sh jetson shell       # open a shell inside the container
-./start-container.sh jetson logs        # follow logs
-./start-container.sh jetson down        # stop the container
-./start-container.sh jetson restart     # stop and restart
+./slam_launch.sh build       # build only
+./slam_launch.sh shell       # open a shell inside the container
+./slam_launch.sh logs        # follow logs
+./slam_launch.sh down        # stop the container
+./slam_launch.sh restart     # stop and restart
 ```
 
 ## RoboSense SDK Setup
@@ -27,8 +27,8 @@ sudo ip addr add 192.168.1.102/24 dev eno1
 
 Start the container:
 ```
-./start-container.sh jetson up
-./start-container.sh jetson shell
+./slam_launch.sh up
+./slam_launch.sh shell
 ```
 
 ### Configure YAML File
@@ -81,7 +81,7 @@ echo $RMW_IMPLEMENTATION
 ros2 run demo_nodes_cpp talker
 
 # terminal 2 — open second shell into same container
-./start-container.sh shell
+./slam_launch.sh shell
 ros2 run demo_nodes_cpp listener
 ```
 

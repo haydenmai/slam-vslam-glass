@@ -54,6 +54,12 @@ ros2 topic list | grep -E "rslidar|point|scan"
 ros2 topic hz /rslidar_points
 ```
 
+### Editing `config.yaml`
+Depending on your usage, you may need to edit `config.yaml`:
+```
+sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
+```
+
 ## ROS2 Verification Commands
 Below are a list of commands to check if ROS2 is properly installed in the Docker container.
 ```
@@ -90,3 +96,10 @@ ros2 topic echo /<TOPIC_NAME>
 
 ## ROS2 Bag
 With the container full ready for Lidar, we can now record the lidar topics. Refer to the [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk/blob/main/doc/howto/11_how_to_record_replay_packet_rosbag.md) for use with ROS2 Bags.
+
+
+The instruction may refer the configuration settings to `config.txt`:
+```
+sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
+```
+

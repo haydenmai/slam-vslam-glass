@@ -91,7 +91,7 @@ ros2 topic list
 # expected: /chatter, /rosout, /parameter_events
 ```
 
-### Verify Topics Outside Containers
+### Topics Access Outside Containers
 ```
 # anywhere else outside container or in another container
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp

@@ -19,6 +19,11 @@
 ### Guides
 This repository also contains a list of guides found in the `setup-guide` folder to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
 
+If these scripts does fail in the future, checkout to the commit below. setup-guide will contain a list of commands you can run manually to investigate point of failure.
+```
+git checkout 10a2f06a4bdd8e94f80935966f03edde8c3d024f
+```
+
 ## Cloning this repository
 To download/clone this repo, run either set of commands:
 

@@ -47,6 +47,8 @@ source /opt/rslidar_ws/install/setup.bash
 ros2 run rslidar_sdk rslidar_sdk_node --ros-args -p config_path:=/opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
 ```
 
+**Note:** Refer to [ROS2 Bag](#ros2-bag) for recording and replaying ROS2 Bags.
+
 ### Check Topic
 In another terminal/container shell, you can check if the node is publishing to the point cloud topic `/rslidar_points`. 
 ```bash
@@ -95,7 +97,7 @@ ros2 topic echo /<TOPIC_NAME>
 ```
 
 ## ROS2 Bag
-With the container full ready for Lidar, we can now record the lidar topics. Refer to the [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk/blob/main/doc/howto/11_how_to_record_replay_packet_rosbag.md) for use with ROS2 Bags.
+With the container full ready for Lidar, we can now record the lidar topics. Refer to the [    rslidar_sdk/doc/howto/11_how_to_record_replay_packet_rosbag.md](https://github.com/RoboSense-LiDAR/rslidar_sdk/blob/main/doc/howto/11_how_to_record_replay_packet_rosbag.md) for use with ROS2 Bags.
 
 
 The instruction may refer the configuration settings to `config.txt`:

@@ -42,6 +42,29 @@ git submodule update --init --recursive
 
 ## Directory
 
+```text
+slam-vslam-glass/
+├── README.md
+│
+├── slam_launch.sh
+├── vslam_first_launch.sh
+├── vslam_subsequent_launch.sh
+│
+├── docker-slam/
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── entrypoint.sh
+│
+├── setup-guide/
+│   ├── slam.md
+│   ├── turtlebot2.md
+│   ├── vslam-rosbag.md
+│   └── vslam.md
+│
+├── isaac_ros_common/ 	# submodule
+└── spark-fast-lio/ 	# submodule
+```
+
 ## References
 ### Papers
 references needed

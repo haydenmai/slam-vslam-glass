@@ -1,6 +1,24 @@
 # Running VSLAM
 ## 1st Launch
 To start, we need to download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, which will automatically create and launch a docker image. **Note:** This only needs be run once, subsequent runs need a different set of commands.
+
+### 1st Launch (Recommended)
+Run one script from the repository root:
+```
+cd {$REPO_DIR}
+bash vslam_first_launch.sh
+```
+
+This script automates:
+- cloning `zed-ros2-wrapper` (if missing)
+- `git-lfs` setup on host
+- NVIDIA CDI generation (`nvidia-ctk cdi generate`)
+- launching `isaac_ros_common/scripts/run_dev.sh`
+- installing ZED SDK in container (if missing)
+- installing VSLAM apt dependencies
+- rosdep install + `colcon build --packages-up-to zed_wrapper`
+
+### Manual 1st Launch
 ```
 cd {$REPO_DIR}
 cd isaac_ros_common/
@@ -71,6 +89,25 @@ rviz2 -d $(ros2 pkg prefix isaac_ros_visual_slam --share)/rviz/default.cfg.rviz
 
 ## Subsequent Launches
 Once you run through the 1st launcher instructions, files are already downloaded into the image. As a result, future launches of isaac-ros-common only requires installing ZED SDKs and dependencies, as well as building the wrapper.
+
+### Dedicated Script (Recommended)
+From repository root:
+```
+bash vslam_subsequent_launch.sh
+```
+
+Optional modes:
+```
+# launch VSLAM demo
+bash vslam_subsequent_launch.sh --launch
+
+# run RViz only
+bash vslam_subsequent_launch.sh --rviz
+
+# for both, run in two terminals
+bash vslam_subsequent_launch.sh --launch
+bash vslam_subsequent_launch.sh --rviz
+```
 
 ### Jetson
 ```

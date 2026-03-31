@@ -81,7 +81,7 @@ echo $RMW_IMPLEMENTATION
 ros2 run demo_nodes_cpp talker
 
 # terminal 2 — open second shell into same container
-docker compose -f docker-slam/docker-compose.yml exec ros2 bash
+./start-container.sh shell
 ros2 run demo_nodes_cpp listener
 ```
 

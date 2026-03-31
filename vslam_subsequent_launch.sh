@@ -6,6 +6,7 @@ set -euo pipefail
 #   bash vslam_subsequent_launch.sh
 #   bash vslam_subsequent_launch.sh --launch
 #   bash vslam_subsequent_launch.sh --launch --rviz
+#   bash vslam_subsequent_launch.sh --launch --rebuild
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
@@ -13,12 +14,14 @@ ISAAC_DIR="${REPO_ROOT}/isaac_ros_common"
 
 DO_LAUNCH=0
 DO_RVIZ=0
+DO_REBUILD=0
 
 usage() {
-  echo "Usage: bash vslam_subsequent_launch.sh [--launch] [--rviz]"
+  echo "Usage: bash vslam_subsequent_launch.sh [--launch] [--rviz] [--rebuild]"
   echo ""
   echo "  --launch   Launch Isaac ROS Visual SLAM demo inside container"
   echo "  --rviz     Start rviz2 with visual_slam config (implies --launch not required)"
+  echo "  --rebuild  Rebuild zed_wrapper in container before launching"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -29,6 +32,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --rviz)
       DO_RVIZ=1
+      shift
+      ;;
+    --rebuild)
+      DO_REBUILD=1
       shift
       ;;
     -h|--help)
@@ -88,21 +95,31 @@ rviz2 -d $(ros2 pkg prefix isaac_ros_visual_slam --share)/rviz/default.cfg.rviz
 EOF
 fi
 
+REBUILD_CMD=""
+if [[ ${DO_REBUILD} -eq 1 ]]; then
+  read -r -d '' REBUILD_CMD <<'EOF' || true
+echo "[container] Rebuilding zed_wrapper..."
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-up-to zed_wrapper
+source install/setup.bash
+EOF
+fi
+
 if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 0 ]]; then
   echo "[host] Starting/attaching isaac_ros_common dev container shell..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; exec bash"
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; exec bash"
   exit 0
 fi
 
 if [[ ${DO_LAUNCH} -eq 1 && ${DO_RVIZ} -eq 0 ]]; then
   echo "[host] Starting/attaching container and launching VSLAM..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${LAUNCH_CMD}"
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; ${LAUNCH_CMD}"
   exit 0
 fi
 
 if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 1 ]]; then
   echo "[host] Starting/attaching container and launching rviz2..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${RVIZ_CMD}"
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; ${RVIZ_CMD}"
   exit 0
 fi
 

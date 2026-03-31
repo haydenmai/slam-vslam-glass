@@ -16,13 +16,18 @@ You can run this script to build and bring up the Docker container.
 ## RoboSense SDK Setup
 The Jetson Docker image clones and builds `rslidar_sdk` and `rslidar_msg` during `docker compose build`, so you do not need to run the colcon build steps manually each time. Previous commits of this file contains manual methods to install the SDK within the container if things go wrong.
 
-Ensure that the lidar is connected. Check & Set IP for lidar & check packets are reaching Jetson/container network. You can set this to be permanent using Ubuntu's `Settings`->`Network` and configure a static IP address. 
+Ensure that the lidar is connected. Check & Set IP for lidar & check packets are reaching Jetson/container network. You can set this to be permanent using Ubuntu's `Settings`->`Network` and configure a static IP address of `192.168.1.102` with netmask of `255.255.255.0`. 
 ```bash
 ip a # Check where lidar is coming from
-sudo ip addr add 192.168.1.102/24 dev eno1
+sudo ip addr add 192.168.1.102/24 dev eno1 # Temporary, use Settings->Network for permanent static ip
 
 # Run to check if data is being received
-#sudo tcpdump -ni any udp port 6699 or udp port 7788
+#sudo tcpdump -ni any udp port 6699 or udp port 7788 or udp port 6688
+
+# Check each individual port
+#sudo tcpdump -ni any udp port 6699 # MSOP
+#sudo tcpdump -ni any udp port 7788 # DIFOP
+#sudo tcpdump -ni any udp port 6688 # IMU
 ```
 
 Start the container:
@@ -44,8 +49,7 @@ lidar:
             lidar_type: RSAIRY
             msop_port: 6699
             difop_port: 7788
-            host_address: 0.0.0.0
-            group_address: 0.0.0.0
+            imu_port: 6688
 ```
 
 ### Launch Lidar Node (w/ RViz)
@@ -101,3 +105,6 @@ export ROS_DOMAIN_ID=0
 ros2 topic list
 ros2 topic echo /<TOPIC_NAME>
 ```
+
+## ROS2 Bag
+With the container full ready for Lidar, we can now record the lidar topics. Refer to the [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk/blob/main/doc/howto/11_how_to_record_replay_packet_rosbag.md) for use with ROS2 Bags.

@@ -14,8 +14,6 @@ You can run this script to build and bring up the Docker container.
 ```
 
 ## RoboSense SDK Setup
-The Jetson Docker image clones and builds `rslidar_sdk` and `rslidar_msg` during `docker compose build`, so you do not need to run the colcon build steps manually each time. Previous commits of this file contains manual methods to install the SDK within the container if things go wrong.
-
 Ensure that the lidar is connected. Check & Set IP for lidar & check packets are reaching Jetson/container network. You can set this to be permanent using Ubuntu's `Settings`->`Network` and configure a static IP address of `192.168.1.102` with netmask of `255.255.255.0`. 
 ```bash
 ip a # Check where lidar is coming from
@@ -50,6 +48,21 @@ lidar:
             msop_port: 6699
             difop_port: 7788
             imu_port: 6688
+```
+
+Edit `CMakeLists.txt` to enable IMU parsing:
+```
+sudo nvim /opt/rslidar_ws/src/rslidar_sdk/CMakeLists.txt
+```
+
+Change `option(ENABLE_IMU_DATA_PARSE           "Enable imu data parse" OFF)` to `option(ENABLE_IMU_DATA_PARSE           "Enable imu data parse" ON)`
+
+### Build the Lidar SDK
+We can then build the SDK using `colcon`
+```
+cd /opt/rslidar_ws
+colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev -DENABLE_IMU_DATA_PARSE=ON
+source install/setup.bash
 ```
 
 ### Launch Lidar Node (w/ RViz)

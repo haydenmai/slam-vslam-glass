@@ -95,16 +95,10 @@ RUN mkdir -p /opt/rslidar_ws/src && \
       sed -i -E "s|^([[:space:]]*msop_port:[[:space:]]*).*$|\\1${RSLIDAR_MSOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
       sed -i -E "s|^([[:space:]]*difop_port:[[:space:]]*).*$|\\1${RSLIDAR_DIFOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
       sed -i -E "s|^([[:space:]]*imu_port:[[:space:]]*).*$|\\1${RSLIDAR_IMU_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
-    else \
-      cat >> /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml <<EOF
-
-lidar:
-    - driver:
-            lidar_type: ${RSLIDAR_LIDAR_TYPE}
-            msop_port: ${RSLIDAR_MSOP_PORT}
-            difop_port: ${RSLIDAR_DIFOP_PORT}
-            imu_port: ${RSLIDAR_IMU_PORT}
-EOF
+        else \
+            printf '\nlidar:\n    - driver:\n            lidar_type: %s\n            msop_port: %s\n            difop_port: %s\n            imu_port: %s\n' \
+                "${RSLIDAR_LIDAR_TYPE}" "${RSLIDAR_MSOP_PORT}" "${RSLIDAR_DIFOP_PORT}" "${RSLIDAR_IMU_PORT}" \
+                >> /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
     fi && \
     sed -i -E 's|option\(ENABLE_IMU_DATA_PARSE([[:space:]]+"Enable imu data parse"[[:space:]]+)OFF\)|option(ENABLE_IMU_DATA_PARSE\1ON)|' /opt/rslidar_ws/src/rslidar_sdk/CMakeLists.txt && \
     cd /opt/rslidar_ws && \

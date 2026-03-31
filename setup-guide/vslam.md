@@ -19,6 +19,12 @@ This script automates:
 - rosdep install + `colcon build --packages-up-to zed_wrapper`
 - `source install/setup.bash` and opens an interactive shell ready to launch VSLAM
 
+Test if ZED SDK successfully installed
+```
+# Launch the ZED Explorer
+/usr/local/zed/tools/ZED_Explorer	
+```
+
 ### Running Isaac ROS Visual SLAM
 Run the following launch file to spin up a demo of this package with a ZED Camera:
 ```

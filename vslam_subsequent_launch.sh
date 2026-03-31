@@ -105,21 +105,41 @@ source install/setup.bash
 EOF
 fi
 
+FULL_CMD="${BASE_CMD}"
+if [[ ${DO_REBUILD} -eq 1 ]]; then
+  FULL_CMD+=$'\n'
+  FULL_CMD+="${REBUILD_CMD}"
+fi
+
 if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 0 ]]; then
+  if [[ ${DO_REBUILD} -eq 1 ]]; then
+    echo "[host] Rebuild requested: zed_wrapper will be built before opening shell."
+  fi
   echo "[host] Starting/attaching isaac_ros_common dev container shell..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; exec bash"
+  FULL_CMD+=$'\nexec bash'
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
   exit 0
 fi
 
 if [[ ${DO_LAUNCH} -eq 1 && ${DO_RVIZ} -eq 0 ]]; then
+  if [[ ${DO_REBUILD} -eq 1 ]]; then
+    echo "[host] Rebuild requested: zed_wrapper will be built before VSLAM launch."
+  fi
   echo "[host] Starting/attaching container and launching VSLAM..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; ${LAUNCH_CMD}"
+  FULL_CMD+=$'\n'
+  FULL_CMD+="${LAUNCH_CMD}"
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
   exit 0
 fi
 
 if [[ ${DO_LAUNCH} -eq 0 && ${DO_RVIZ} -eq 1 ]]; then
+  if [[ ${DO_REBUILD} -eq 1 ]]; then
+    echo "[host] Rebuild requested: zed_wrapper will be built before rviz2 launch."
+  fi
   echo "[host] Starting/attaching container and launching rviz2..."
-  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${BASE_CMD}; ${REBUILD_CMD}; ${RVIZ_CMD}"
+  FULL_CMD+=$'\n'
+  FULL_CMD+="${RVIZ_CMD}"
+  "${ISAAC_DIR}/scripts/run_dev.sh" -d "${ISAAC_DIR}" -- -lc "${FULL_CMD}"
   exit 0
 fi
 

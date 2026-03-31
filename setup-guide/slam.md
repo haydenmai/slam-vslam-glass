@@ -99,9 +99,15 @@ ros2 topic echo /<TOPIC_NAME>
 ## ROS2 Bag
 With the container full ready for Lidar, we can now record the lidar topics. Refer to the [    rslidar_sdk/doc/howto/11_how_to_record_replay_packet_rosbag.md](https://github.com/RoboSense-LiDAR/rslidar_sdk/blob/main/doc/howto/11_how_to_record_replay_packet_rosbag.md) for use with ROS2 Bags.
 
-
 The instruction may refer the configuration settings to `config.txt`:
 ```
 sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
 ```
+
+In the instruction, the rosbag command is for ROS, not ROS2. Record with this command instead:
+```
+ros2 bag record /rslidar_packets /rslidar_imu_data -o slam_bag
+```
+
+
 

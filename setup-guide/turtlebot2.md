@@ -32,9 +32,9 @@ You can now run the turtlebot2! Either ssh into the jetson or connect a keyboard
 
 In terminal 1:
 ```
-ros2 launch kobuki_node kobuki_node-launch.py
 cd ~/ros2_ws/
 source install/setup.bash
+ros2 launch kobuki_node kobuki_node-launch.py
 ```
 
 In terminal 2:

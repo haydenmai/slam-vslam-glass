@@ -43,6 +43,17 @@ set -euo pipefail
 
 cd "${ISAAC_ROS_WS}"
 
+sanitize_apt_sources() {
+  # Some base images include a Yarn repo without a valid key, which can block apt-get update.
+  if [ -f /etc/apt/sources.list.d/yarn.list ] || [ -f /etc/apt/sources.list.d/yarn.sources ]; then
+    if ! apt-key list 2>/dev/null | grep -q '62D54FD4003F6525'; then
+      echo "[container] Disabling invalid Yarn APT source(s) (missing key 62D54FD4003F6525)"
+      [ -f /etc/apt/sources.list.d/yarn.list ] && sudo mv /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list.disabled
+      [ -f /etc/apt/sources.list.d/yarn.sources ] && sudo mv /etc/apt/sources.list.d/yarn.sources /etc/apt/sources.list.d/yarn.sources.disabled
+    fi
+  fi
+}
+
 if [ -x docker/scripts/install-zed-aarch64.sh ]; then
   if [ ! -d /usr/local/zed ]; then
     echo "[container] Installing ZED SDK..."
@@ -57,6 +68,7 @@ else
 fi
 
 echo "[container] Installing VSLAM apt dependencies..."
+sanitize_apt_sources
 sudo apt-get update
 sudo apt-get install -y \
   ros-humble-isaac-ros-visual-slam \

@@ -6,6 +6,10 @@ services:
       args:
         RSLIDAR_SDK_REF: ${RSLIDAR_SDK_REF:-main}
         RSLIDAR_MSG_REF: ${RSLIDAR_MSG_REF:-main}
+        RSLIDAR_LIDAR_TYPE: ${RSLIDAR_LIDAR_TYPE:-RSAIRY}
+        RSLIDAR_MSOP_PORT: ${RSLIDAR_MSOP_PORT:-6699}
+        RSLIDAR_DIFOP_PORT: ${RSLIDAR_DIFOP_PORT:-7788}
+        RSLIDAR_IMU_PORT: ${RSLIDAR_IMU_PORT:-6688}
     container_name: ros2_humble_slam_jetson
     network_mode: host
     runtime: nvidia

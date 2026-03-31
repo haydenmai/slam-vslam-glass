@@ -5,6 +5,10 @@ ENV ROS_DISTRO=humble
 ENV ROS_DOMAIN_ID=0
 ARG RSLIDAR_SDK_REF=main
 ARG RSLIDAR_MSG_REF=main
+ARG RSLIDAR_LIDAR_TYPE=RSAIRY
+ARG RSLIDAR_MSOP_PORT=6699
+ARG RSLIDAR_DIFOP_PORT=7788
+ARG RSLIDAR_IMU_PORT=6688
 
 # --- User setup ---
 ARG UID=1000
@@ -74,7 +78,7 @@ RUN mkdir -p $HOME/.ros/log && \
 # --- rosdep ---
 RUN rosdep init 2>/dev/null || true && rosdep update
 
-# --- RoboSense SDK (clone and build in image) ---
+# --- RoboSense SDK (clone in image) ---
 RUN mkdir -p /opt/rslidar_ws/src && \
     git clone --depth 1 --branch ${RSLIDAR_SDK_REF} https://github.com/RoboSense-LiDAR/rslidar_sdk.git /opt/rslidar_ws/src/rslidar_sdk && \
     cd /opt/rslidar_ws/src/rslidar_sdk && \
@@ -83,8 +87,28 @@ RUN mkdir -p /opt/rslidar_ws/src && \
     git clone --depth 1 --branch ${RSLIDAR_MSG_REF} https://github.com/RoboSense-LiDAR/rslidar_msg.git /opt/rslidar_ws/src/rslidar_msg && \
     unset AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH && \
     source /opt/ros/${ROS_DISTRO}/install/setup.bash && \
+    if grep -Eq '^[[:space:]]*lidar_type:[[:space:]]*' /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+       grep -Eq '^[[:space:]]*msop_port:[[:space:]]*' /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+       grep -Eq '^[[:space:]]*difop_port:[[:space:]]*' /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+       grep -Eq '^[[:space:]]*imu_port:[[:space:]]*' /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; then \
+      sed -i -E "s|^([[:space:]]*lidar_type:[[:space:]]*).*$|\\1${RSLIDAR_LIDAR_TYPE}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*msop_port:[[:space:]]*).*$|\\1${RSLIDAR_MSOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*difop_port:[[:space:]]*).*$|\\1${RSLIDAR_DIFOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*imu_port:[[:space:]]*).*$|\\1${RSLIDAR_IMU_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
+    else \
+      cat >> /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml <<EOF
+
+lidar:
+    - driver:
+            lidar_type: ${RSLIDAR_LIDAR_TYPE}
+            msop_port: ${RSLIDAR_MSOP_PORT}
+            difop_port: ${RSLIDAR_DIFOP_PORT}
+            imu_port: ${RSLIDAR_IMU_PORT}
+EOF
+    fi && \
+    sed -i -E 's|option\(ENABLE_IMU_DATA_PARSE([[:space:]]+"Enable imu data parse"[[:space:]]+)OFF\)|option(ENABLE_IMU_DATA_PARSE\1ON)|' /opt/rslidar_ws/src/rslidar_sdk/CMakeLists.txt && \
     cd /opt/rslidar_ws && \
-    colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev && \
+    colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev -DENABLE_IMU_DATA_PARSE=ON && \
     chown -R $USERNAME:$USERNAME /opt/rslidar_ws
 
 # --- Entrypoint script ---

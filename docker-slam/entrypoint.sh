@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ -n "${ROS_ROOT:-}" ] && [ -f "$ROS_ROOT/install/setup.bash" ]; then
 	source "$ROS_ROOT/install/setup.bash"
 elif [ -f "/opt/ros/${ROS_DISTRO:-humble}/install/setup.bash" ]; then

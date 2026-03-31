@@ -34,37 +34,6 @@ Start the container:
 ./slam_launch.sh shell
 ```
 
-### Configure YAML File
-If you see `ERRCODE_MSOPTIMEOUT` while running the Lidar node, the node is running but not receiving UDP packets from the lidar. We need to configure the yaml file to detect for the Airy model before running the node.
-For RS-LiDAR-AIRY, edit `config.yaml`:
-```
-sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
-```
-
-```yaml
-lidar:
-    - driver:
-            lidar_type: RSAIRY
-            msop_port: 6699
-            difop_port: 7788
-            imu_port: 6688
-```
-
-Edit `CMakeLists.txt` to enable IMU parsing:
-```
-sudo nvim /opt/rslidar_ws/src/rslidar_sdk/CMakeLists.txt
-```
-
-Change `option(ENABLE_IMU_DATA_PARSE           "Enable imu data parse" OFF)` to `option(ENABLE_IMU_DATA_PARSE           "Enable imu data parse" ON)`
-
-### Build the Lidar SDK
-We can then build the SDK using `colcon`
-```
-cd /opt/rslidar_ws
-colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -Wno-dev -DENABLE_IMU_DATA_PARSE=ON
-source install/setup.bash
-```
-
 ### Launch Lidar Node (w/ RViz)
 ```bash
 ros2 pkg list | grep rslidar

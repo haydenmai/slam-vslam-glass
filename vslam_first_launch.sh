@@ -71,9 +71,11 @@ rosdep install --from-paths src/zed-ros2-wrapper --ignore-src -r -y
 echo "[container] Building zed_wrapper..."
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install --packages-up-to zed_wrapper
+source install/setup.bash
 
 echo "[container] First-launch setup complete."
-echo "[container] Next step: source install/setup.bash and launch isaac_ros_examples visual_slam demo."
+echo "[container] Workspace sourced. You can launch isaac_ros_examples visual_slam demo now."
+exec bash
 EOF
 
 echo "[host] Launching isaac_ros_common dev container and running first-launch setup..."

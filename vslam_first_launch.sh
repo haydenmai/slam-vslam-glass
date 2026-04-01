@@ -12,6 +12,14 @@ if [ ! -d "${ISAAC_DIR}" ]; then
   exit 1
 fi
 
+RUN_DEV_SH="${ISAAC_DIR}/scripts/run_dev.sh"
+if [ -f "${RUN_DEV_SH}" ]; then
+  echo "[host] Ensuring run_dev.sh forwards args on last line..."
+  if ! tail -n 1 "${RUN_DEV_SH}" | grep -q '\$@'; then
+    sed -i '$ s|$| "$@"|' "${RUN_DEV_SH}"
+  fi
+fi
+
 echo "[host] Preparing zed-ros2-wrapper source..."
 mkdir -p "${ISAAC_DIR}/src"
 if [ ! -d "${WRAPPER_DIR}" ]; then

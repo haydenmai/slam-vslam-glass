@@ -1,11 +1,11 @@
 # Running VSLAM
 ## 1st Launch
-To start, we need to download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, which will automatically create and launch a docker image. **Note:** This only needs be run once, subsequent runs need a different set of commands.
+To start, we need download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, `scripts/run_dev.sh` automatically create and launch a docker image. **Note:** This only needs be run once, subsequent launches can be done with `vslam_subsequent_launch.sh`.
 
-### 1st Launch (Recommended)
-Run `vslam_first_launch.sh` script from the repository root:
+Run `vslam_first_launch.sh` script from the repository root, ensure that the isaac_ros_common submodule is cloned:
 ```
 cd {$REPO_DIR}
+git submodule update --init --recursive 
 ./vslam_first_launch.sh
 ```
 
@@ -58,12 +58,12 @@ Options:
 ```
 
 ## Troubleshooting
-If you ran `vslam_first_launch.sh` and compiling or launch issues occur, it may be missing the quickstart assets:
+If you ran `vslam_first_launch.sh` and compiling or launch issues occur, it may be missing the quickstart assets. In the `isaac_ros_common` directory:
 ```
 # Libraries
 sudo apt-get install -y curl jq tar
 
-# Download assets from NGC
+# Download assets from NGC 
 NGC_ORG="nvidia"
 NGC_TEAM="isaac"
 PACKAGE_NAME="isaac_ros_visual_slam"

@@ -1,0 +1,24 @@
+topics:
+  -
+    topic: /tf
+    type: tf2_msgs/msg/TFMessage
+    queue_size: 100
+  -
+    topic: /tf_static
+    type: tf2_msgs/msg/TFMessage
+    queue_size: 1
+    qos:
+      history: keep_all
+      durability: transient_local
+  -
+    topic: /clock
+    type: rosgraph_msgs/msg/Clock
+    queue_size: 10
+  -
+    topic: /scan
+    type: sensor_msgs/msg/LaserScan
+    queue_size: 10
+  -
+    topic: /base_scan
+    type: sensor_msgs/msg/LaserScan
+    queue_size: 10

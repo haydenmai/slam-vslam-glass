@@ -1,0 +1,76 @@
+# Usage:
+#
+#   Build the bridge image first (one-time):
+#     docker build -t local/ros1-ros2-bridge:foxy-noetic \
+#                  -f docker-slam/Dockerfile.bridge .
+#
+#   Put ROS2 bags under ../external/ros2_bags (relative to repo root).
+#
+#   Run only the bridge (roscore + slam_glass run directly in Ubuntu 20.04 WSL):
+#     docker compose -f docker-slam/docker-compose.bridge.yml up ros1_bridge
+#
+#   Run the full stack in containers (optional — needs slam_glass_ws volume):
+#     docker compose -f docker-slam/docker-compose.bridge.yml up
+
+services:
+  # Optional: run roscore in a container instead of directly in Ubuntu 20.04.
+  # If you already have roscore running in your Ubuntu 20.04 WSL shell,
+  # skip this service: docker compose up ros1_bridge
+  ros1_master:
+    image: ros:noetic-ros-core
+    container_name: ros1_master
+    network_mode: host
+    command: bash -lc "source /opt/ros/noetic/setup.bash ; roscore"
+
+  # Optional: run slam_glass in a container.
+  # Requires slam_glass built at ../external/slam_glass_ws (relative to repo root).
+  # Skip this service if running slam_glass directly in Ubuntu 20.04 WSL.
+  ros1_slam_glass:
+    image: ros:noetic-ros-base
+    container_name: ros1_slam_glass
+    network_mode: host
+    depends_on:
+      - ros1_master
+    environment:
+      - ROS_MASTER_URI=http://127.0.0.1:11311
+      - ROS_IP=127.0.0.1
+    volumes:
+      - ../external/slam_glass_ws:/home/ros1/slam_glass_ws
+    working_dir: /home/ros1/slam_glass_ws
+    command: >
+      bash -lc "
+      source /opt/ros/noetic/setup.bash ;
+      apt-get update && apt-get install -y --no-install-recommends ros-noetic-tf ;
+      export ROS_PACKAGE_PATH=/home/ros1/slam_glass_ws/src:$$ROS_PACKAGE_PATH ;
+      export CMAKE_PREFIX_PATH=/home/ros1/slam_glass_ws/devel:$$CMAKE_PREFIX_PATH ;
+      export LD_LIBRARY_PATH=/home/ros1/slam_glass_ws/src/slam_glass/lib:/home/ros1/slam_glass_ws/devel/lib:$$LD_LIBRARY_PATH ;
+      roslaunch slam_glass slam_glass_pr2.launch
+      "
+
+  # Bridge: connects ROS 1 master (on host port 11311) to ROS 2 Foxy.
+  # Build the image with Dockerfile.bridge before running this service.
+  ros1_bridge:
+    image: local/ros1-ros2-bridge:foxy-noetic
+    container_name: ros1_bridge
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://127.0.0.1:11311
+      - ROS_DOMAIN_ID=0
+      - ROS2_DISTRO=foxy
+    volumes:
+      - ../external/ros2_bags:/bags:ro
+
+  # Optional ROS2 bag player container.
+  # Keeps a Foxy shell alive so you can run ros2 bag commands with docker exec.
+  ros2_bag_player:
+    image: local/ros1-ros2-bridge:foxy-noetic
+    container_name: ros2_bag_player
+    network_mode: host
+    depends_on:
+      - ros1_bridge
+    environment:
+      - ROS_DOMAIN_ID=0
+      - ROS2_DISTRO=foxy
+    volumes:
+      - ../external/ros2_bags:/bags:ro
+    command: bash -lc "source /opt/ros/foxy/setup.bash ; tail -f /dev/null"

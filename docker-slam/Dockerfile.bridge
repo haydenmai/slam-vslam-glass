@@ -1,0 +1,54 @@
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │  Dockerfile.bridge                                                           │
+# │  Builds a single image with:                                                 │
+# │    • ROS 1 Noetic (apt – Ubuntu 20.04/Focal)                                │
+# │    • ROS 2 Foxy   (apt – Ubuntu 20.04/Focal)                                │
+# │    • ros1_bridge  (apt)                                                      │
+# │                                                                              │
+# │  Build:                                                                      │
+# │    docker build -t local/ros1-ros2-bridge:foxy-noetic \                     │
+# │                 -f docker-slam/Dockerfile.bridge .                           │
+# └──────────────────────────────────────────────────────────────────────────────┘
+
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    ROS1_DISTRO=noetic \
+    ROS2_DISTRO=foxy \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# ── 1. System base ─────────────────────────────────────────────────────────────
+RUN apt-get update && apt-get install -y \
+    locales curl gnupg2 lsb-release wget git \
+    build-essential cmake \
+    python3-pip \
+    && locale-gen en_US.UTF-8 \
+    && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── 2. ROS 1 Noetic + ROS 2 Foxy from apt ──────────────────────────────────────
+RUN mkdir -p /etc/apt/keyrings \
+        && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+            | gpg --dearmor -o /etc/apt/keyrings/ros-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros/ubuntu focal main" \
+            > /etc/apt/sources.list.d/ros1.list \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu focal main" \
+            > /etc/apt/sources.list.d/ros2.list \
+        && apt-get update && apt-get install -y \
+            ros-${ROS1_DISTRO}-ros-base \
+            ros-${ROS1_DISTRO}-tf2-msgs \
+            ros-${ROS2_DISTRO}-ros-base \
+            ros-${ROS2_DISTRO}-tf2-msgs \
+            ros-${ROS2_DISTRO}-ros1-bridge \
+        && rm -rf /var/lib/apt/lists/*
+
+# ── 3. Runtime ─────────────────────────────────────────────────────────────────
+ENV ROS_MASTER_URI=http://127.0.0.1:11311 \
+    ROS_DOMAIN_ID=0
+
+COPY docker-slam/entrypoint.bridge.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["ros2", "run", "ros1_bridge", "dynamic_bridge", "--", "--bridge-all-2to1-topics"]

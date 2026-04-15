@@ -1,0 +1,7 @@
+.vscode/
+
+# Container-built ROS workspace artifacts and copied package sources
+external/slam_glass_ws/
+
+# Local bag data
+external/ros2_bags/

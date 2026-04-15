@@ -12,3 +12,6 @@
 [submodule "slam_glass"]
 	path = slam_glass
 	url = https://github.com/Kaidenpalmers/glass_slam.git
+[submodule "ros1_bridge"]
+	path = ros1_bridge
+	url = https://github.com/ros2/ros1_bridge

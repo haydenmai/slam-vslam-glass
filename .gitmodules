@@ -9,3 +9,6 @@
 	path = pointcloud_to_laserscan
 	url = https://github.com/rilyen/pointcloud_to_laserscan.git
 	branch = humble
+[submodule "slam_glass"]
+	path = slam_glass
+	url = https://github.com/uts-magic-lab/slam_glass

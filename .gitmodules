@@ -11,4 +11,4 @@
 	branch = humble
 [submodule "slam_glass"]
 	path = slam_glass
-	url = https://github.com/uts-magic-lab/slam_glass
+	url = https://github.com/Kaidenpalmers/glass_slam.git

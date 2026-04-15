@@ -4,4 +4,4 @@
 	branch = release-3.2
 [submodule "spark-fast-lio"]
 	path = spark-fast-lio
-	url = https://github.com/MIT-SPARK/spark-fast-lio.git
+	url = https://github.com/rilyen/spark-fast-lio.git

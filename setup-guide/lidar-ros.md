@@ -1,4 +1,4 @@
-# Running SLAM (+ Intensity Filter)
+# Running Lidar
 ## Container Script
 You can run this script to build and bring up the Docker container.
 ```

@@ -105,7 +105,7 @@ sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
 ```
 
 In the instruction, the rosbag command is for ROS, not ROS2. Record with this command instead:
-**NOTE: MAKE SURE `send_packet_ros` IS SET TO TRUE BEFORE PROCEEDING**
+**NOTE: MAKE SURE `send_packet_ros` IS SET TO `true` BEFORE PROCEEDING**
 ```
 ros2 bag record /rslidar_packets /rslidar_imu_data -o slam_bag
 ```

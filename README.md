@@ -17,7 +17,7 @@
 - Kobuki Turtlebot 2
 
 ### Guides
-This repository also contains a list of guides found in the [setup-guide](setup-guide/) folder to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
+This repository also contains a **list of guides found in the [setup-guide](setup-guide/) folder** to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
 
 If these scripts does fail in the future, checkout to the commit below. After checking out to the branch, `setup-guide` will contain a list of commands you can run manually to investigate point of failure.
 ```

@@ -104,6 +104,15 @@ The instruction may refer the configuration settings to `config.txt`:
 sudo nvim /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml
 ```
 
+### Recording rosbag
+Ensure these are correct in `config.yaml`
+```yaml
+common:
+  msg_source: 1                                       
+  send_packet_ros: true                                
+  send_point_cloud_ros: true                                                   
+```
+
 In the instruction, the rosbag command is for ROS, not ROS2. Record with this command instead:
 **NOTE: MAKE SURE `send_packet_ros` IS SET TO `true` BEFORE PROCEEDING**
 ```

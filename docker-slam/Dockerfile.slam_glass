@@ -1,0 +1,130 @@
+FROM ros:noetic-ros-base
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    ROS_DISTRO=noetic \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# --- User setup ---
+ARG UID=1000
+ARG GID=1000
+ENV USERNAME=linda
+ENV HOME=/home/$USERNAME
+
+RUN useradd -m $USERNAME && \
+    echo "$USERNAME:$USERNAME" | chpasswd && \
+    usermod --shell /bin/bash $USERNAME && \
+    usermod -aG sudo $USERNAME && \
+    mkdir -p /etc/sudoers.d && \
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME && \
+    usermod --uid $UID $USERNAME && \
+    groupmod --gid $GID $USERNAME
+
+# --- System dependencies ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    git \
+    wget \
+    curl \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    python3-rosdep \
+    python3-catkin-tools \
+    python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-wstool \
+    libeigen3-dev \
+    libboost-all-dev \
+    libconsole-bridge-dev \
+    liblog4cxx-dev \
+    libtinyxml-dev \
+    libqt5core5a \
+    libqt5gui5 \
+    libqt5widgets5 \
+    qtbase5-dev \
+    libopencv-dev \
+    libpcl-dev \
+    libvtk7-qt-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libxaw7-dev \
+    libxrandr-dev \
+    libxinerama-dev \
+    libxcursor-dev \
+    libxt-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- ROS1 packages ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-ros-core \
+    ros-noetic-ros-base \
+    ros-noetic-slam-gmapping \
+    ros-noetic-gmapping \
+    ros-noetic-tf \
+    ros-noetic-tf2-ros \
+    ros-noetic-laser-geometry \
+    ros-noetic-pcl-ros \
+    ros-noetic-pcl-conversions \
+    ros-noetic-message-filters \
+    ros-noetic-cv-bridge \
+    ros-noetic-image-transport \
+    ros-noetic-robot-state-publisher \
+    ros-noetic-joint-state-publisher \
+    ros-noetic-rviz \
+    ros-noetic-rostest \
+    ros-noetic-rosunit \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- Catkin workspace setup ---
+RUN mkdir -p /home/$USERNAME/slam_glass_ws && \
+    mkdir -p /home/$USERNAME/.ros && \
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/slam_glass_ws && \
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.ros && \
+    chmod -R 755 /home/$USERNAME/.ros
+
+# --- Copy slam_glass source ---
+COPY ../slam_glass /home/$USERNAME/slam_glass_ws/src/slam_glass
+
+# --- Initialize rosdep as root ---
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    rosdep init 2>/dev/null || true && \
+    rosdep update && \
+    cd /home/$USERNAME/slam_glass_ws && \
+    rosdep install --from-paths src --ignore-src -r -y
+
+# --- Build slam_glass libraries as root ---
+RUN cd /home/$USERNAME/slam_glass_ws/src/slam_glass/gmapping_export && \
+    chmod +x configure && \
+    ./configure && \
+    cd .. && \
+    make -f Makefile.gmapping && \
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/slam_glass_ws
+
+# --- Switch to non-root user ---
+USER $USERNAME
+WORKDIR /home/$USERNAME/slam_glass_ws
+
+# --- ROS setup ---
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
+    echo "source /home/$USERNAME/slam_glass_ws/devel/setup.bash" >> ~/.bashrc && \
+    echo "export ROS_MASTER_URI=http://127.0.0.1:11311" >> ~/.bashrc && \
+    echo "export ROS_IP=127.0.0.1" >> ~/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/home/$USERNAME/slam_glass_ws/src/slam_glass/gmapping_export/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc && \
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc && \
+    echo "export ROS_DOMAIN_ID=0" >> ~/.bashrc
+
+# --- Catkin build as user ---
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make"
+
+# --- Entrypoint script ---
+COPY docker-slam/entrypoint.slam_glass.sh /entrypoint.sh
+USER root
+RUN chmod +x /entrypoint.sh
+USER $USERNAME
+
+# --- Default command ---
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]

@@ -82,9 +82,12 @@ RUN mkdir -p /opt/rslidar_ws/src && \
       sed -i -E "s|^([[:space:]]*lidar_type:[[:space:]]*).*$|\\1${RSLIDAR_LIDAR_TYPE}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
       sed -i -E "s|^([[:space:]]*msop_port:[[:space:]]*).*$|\\1${RSLIDAR_MSOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
       sed -i -E "s|^([[:space:]]*difop_port:[[:space:]]*).*$|\\1${RSLIDAR_DIFOP_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
-      sed -i -E "s|^([[:space:]]*imu_port:[[:space:]]*).*$|\\1${RSLIDAR_IMU_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
+      sed -i -E "s|^([[:space:]]*imu_port:[[:space:]]*).*$|\\1${RSLIDAR_IMU_PORT}|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*msg_source:[[:space:]]*).*$|\\1 2|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*send_packet_ros:[[:space:]]*).*$|\\1 false|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml && \
+      sed -i -E "s|^([[:space:]]*send_point_cloud_ros:[[:space:]]*).*$|\\1 true|" /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
     else \
-      printf '\nlidar:\n    - driver:\n            lidar_type: %s\n            msop_port: %s\n            difop_port: %s\n            imu_port: %s\n' \
+      printf '\ncommon:\n    msg_source: 2\n    send_packet_ros: false\n    send_point_cloud_ros: true\n\nlidar:\n    - driver:\n            lidar_type: %s\n            msop_port: %s\n            difop_port: %s\n            imu_port: %s\n' \
         "${RSLIDAR_LIDAR_TYPE}" "${RSLIDAR_MSOP_PORT}" "${RSLIDAR_DIFOP_PORT}" "${RSLIDAR_IMU_PORT}" \
         >> /opt/rslidar_ws/src/rslidar_sdk/config/config.yaml; \
     fi && \

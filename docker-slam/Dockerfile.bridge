@@ -1,15 +1,3 @@
-# ┌──────────────────────────────────────────────────────────────────────────────┐
-# │  Dockerfile.bridge                                                           │
-# │  Builds a single image with:                                                 │
-# │    • ROS 1 Noetic (apt – Ubuntu 20.04/Focal)                                │
-# │    • ROS 2 Foxy   (apt – Ubuntu 20.04/Focal)                                │
-# │    • ros1_bridge  (apt)                                                      │
-# │                                                                              │
-# │  Build:                                                                      │
-# │    docker build -t local/ros1-ros2-bridge:foxy-noetic \                     │
-# │                 -f docker-slam/Dockerfile.bridge .                           │
-# └──────────────────────────────────────────────────────────────────────────────┘
-
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -20,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # ── 1. System base ─────────────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y \
-    locales curl gnupg2 lsb-release wget git \
+    locales curl gnupg2 lsb-release wget git ca-certificates \
     build-essential cmake \
     python3-pip \
     && locale-gen en_US.UTF-8 \
@@ -38,17 +26,43 @@ RUN mkdir -p /etc/apt/keyrings \
         && apt-get update && apt-get install -y \
             ros-${ROS1_DISTRO}-ros-base \
             ros-${ROS1_DISTRO}-tf2-msgs \
+            ros-${ROS1_DISTRO}-sensor-msgs \
             ros-${ROS2_DISTRO}-ros-base \
             ros-${ROS2_DISTRO}-tf2-msgs \
-            ros-${ROS2_DISTRO}-ros1-bridge \
+            ros-${ROS2_DISTRO}-sensor-msgs \
+            ros-${ROS2_DISTRO}-rmw-fastrtps-cpp \
+            ros-${ROS2_DISTRO}-rmw-cyclonedds-cpp \
+            python3-rosdep \
+            python3-colcon-common-extensions \
+            python3-vcstool \
         && rm -rf /var/lib/apt/lists/*
 
-# ── 3. Runtime ─────────────────────────────────────────────────────────────────
+# ── 3. Build ros1_bridge from source (foxy branch) ───────────────────────────
+SHELL ["/bin/bash", "-c"]
+RUN rosdep init 2>/dev/null || true && rosdep update
+
+RUN mkdir -p /bridge_ws/src && \
+    git clone --depth 1 --branch foxy \
+        https://github.com/ros2/ros1_bridge.git \
+        /bridge_ws/src/ros1_bridge && \
+    source /opt/ros/${ROS1_DISTRO}/setup.bash && \
+    source /opt/ros/${ROS2_DISTRO}/setup.bash && \
+    cd /bridge_ws && \
+    rosdep install --from-paths src --ignore-src -r -y \
+        --skip-keys "demo_nodes_cpp demo_nodes_cpp_native" && \
+    colcon build \
+        --packages-select ros1_bridge \
+        --cmake-force-configure \
+        --cmake-args -DBUILD_TESTING=OFF \
+        --executor sequential
+
+# ── 4. Runtime ─────────────────────────────────────────────────────────────────
 ENV ROS_MASTER_URI=http://127.0.0.1:11311 \
-    ROS_DOMAIN_ID=0
+    ROS_DOMAIN_ID=0 \
+    RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 
 COPY docker-slam/entrypoint.bridge.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["ros2", "run", "ros1_bridge", "dynamic_bridge", "--", "--bridge-all-2to1-topics"]
+CMD ["ros2", "run", "ros1_bridge", "dynamic_bridge", "--", "--bridge-2to1-topic", "/scan", "--bridge-2to1-topic", "/rslidar_points", "--bridge-2to1-topic", "/rslidar_imu_data", "--bridge-2to1-topic", "/tf", "--bridge-2to1-topic", "/tf_static"]

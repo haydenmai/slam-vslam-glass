@@ -1,0 +1,29 @@
+# Usage:
+#
+#   Build and start SLAM Glass container:
+#     docker compose -f docker-slam/docker-compose.slam-glass.yml up --build slam_glass
+#
+#   Run only SLAM Glass with roscore:
+#     docker compose -f docker-slam/docker-compose.slam-glass.yml up slam_glass
+#
+#   Open shell in container:
+#     ./slam_ros_glass_launch.sh shell
+
+services:
+  # SLAM Glass with ROS1 master
+  slam_glass:
+    build:
+      context: ..
+      dockerfile: docker-slam/Dockerfile.slam_glass
+    image: local/slam-glass:noetic
+    container_name: slam_glass_container
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://127.0.0.1:11311
+      - ROS_IP=127.0.0.1
+      - ROS_DISTRO=noetic
+      - USERNAME=linda
+    volumes:
+      - ../slam_glass_ws:/home/linda/slam_glass_ws
+    working_dir: /home/linda/slam_glass_ws
+    command: bash -lc "source /opt/ros/noetic/setup.bash ; source /home/linda/slam_glass_ws/devel/setup.bash ; tail -f /dev/null"

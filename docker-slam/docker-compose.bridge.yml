@@ -20,3 +20,17 @@ services:
       - ROS_DOMAIN_ID=0
       - ROS2_DISTRO=foxy
       - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - FASTDDS_BUILTIN_TRANSPORTS=UDPv4
+      - ROS_LOCALHOST_ONLY=0
+    volumes:
+      - ../setup-guide/bridge_topics.yaml:/bridge_topics.yaml:ro
+    command:
+      - bash
+      - -lc
+      - |
+        until rosparam list >/dev/null 2>&1; do
+          echo "Waiting for ROS1 master at $${ROS_MASTER_URI}..."
+          sleep 1
+        done
+        rosparam load /bridge_topics.yaml
+        exec ros2 run ros1_bridge parameter_bridge

@@ -32,6 +32,21 @@ Build all required Docker images before first use:
 
 ## Complete Workflow
 
+### Working Order
+
+The stack is sensitive to startup order. Use this sequence:
+
+1. Start SLAM Glass with ROS1 master.
+2. Start the ROS2 bag pipeline.
+3. Start the ROS1-ROS2 bridge after ROS2 topics are publishing.
+
+If host-side `ros2 topic list` looks stale, refresh the daemon cache first:
+
+```bash
+ros2 daemon stop
+ros2 daemon start
+```
+
 ### Step 1: Start SLAM Glass with ROS1 Master
 
 ```bash
@@ -53,6 +68,12 @@ This starts the complete ROS2 pipeline:
 - pointcloud_to_laserscan node (converts pointcloud to laser scan)
 - ros2 bag play (plays the bag file)
 
+If `Ctrl+C` does not stop the helper processes cleanly, run:
+
+```bash
+./slam_rosbag_launch.sh pipeline-stop
+```
+
 ### Step 3: Start ROS1-ROS2 Bridge
 
 In a third terminal:
@@ -62,6 +83,8 @@ In a third terminal:
 ```
 
 The bridge will automatically detect the ROS2 topics and create bridges to ROS1.
+
+If the bridge is started before the bag pipeline is publishing topics, it may not create any bridges until the bridge is restarted after topics are available.
 
 ## Verification
 
@@ -81,6 +104,8 @@ You should see topics like:
 - `/rslidar_imu_data`
 - `/tf`
 - `/tf_static`
+
+If those topics are missing on the host, restart the ROS 2 daemon and re-run the check.
 
 ### Check ROS1 Topics
 
@@ -109,6 +134,8 @@ Look for messages like:
 ```
 created 2to1 bridge for topic '/scan' with ROS 2 type 'sensor_msgs/msg/LaserScan' and ROS 1 type 'sensor_msgs/LaserScan'
 ```
+
+If you see no bridge creation messages, verify that `/scan` exists in the ROS 2 bag container first, then restart the bridge.
 
 ### Check SLAM Glass Output
 
@@ -158,7 +185,7 @@ For debugging or development:
 **Solution:** Make sure the ROS1 master is running before starting the bridge. The bridge needs roscore to connect to.
 
 ```bash
-# Check if roscore is running
+# Check if roscore is running in the SLAM Glass container
 ./slam_glass_launch.sh roscore
 ```
 

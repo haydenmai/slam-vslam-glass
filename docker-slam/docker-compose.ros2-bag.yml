@@ -17,6 +17,8 @@ services:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=0
       - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - FASTDDS_BUILTIN_TRANSPORTS=UDPv4
+      - ROS_LOCALHOST_ONLY=0
     volumes:
       - ../src:/home/linda/ros2_ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix

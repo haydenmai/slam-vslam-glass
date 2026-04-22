@@ -48,12 +48,10 @@ RUN mkdir -p /bridge_ws/src && \
     source /opt/ros/${ROS1_DISTRO}/setup.bash && \
     source /opt/ros/${ROS2_DISTRO}/setup.bash && \
     cd /bridge_ws && \
-    rosdep install --from-paths src --ignore-src -r -y \
-        --skip-keys "demo_nodes_cpp demo_nodes_cpp_native" && \
     colcon build \
         --packages-select ros1_bridge \
         --cmake-force-configure \
-        --cmake-args -DBUILD_TESTING=OFF \
+        --cmake-args -DBUILD_TESTING=OFF -DBUILD_GTEST=OFF -DBUILD_GMOCK=OFF \
         --executor sequential
 
 # ── 4. Runtime ─────────────────────────────────────────────────────────────────
@@ -65,4 +63,4 @@ COPY docker-slam/entrypoint.bridge.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["ros2", "run", "ros1_bridge", "dynamic_bridge", "--", "--bridge-2to1-topic", "/scan", "--bridge-2to1-topic", "/rslidar_points", "--bridge-2to1-topic", "/rslidar_imu_data", "--bridge-2to1-topic", "/tf", "--bridge-2to1-topic", "/tf_static"]
+CMD ["ros2", "run", "ros1_bridge", "dynamic_bridge", "--", "--bridge-all-2to1-topics"]

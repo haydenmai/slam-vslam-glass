@@ -3,6 +3,8 @@ topics:
     topic: /tf
     type: tf2_msgs/msg/TFMessage
     queue_size: 100
+    qos:
+      reliability: best_effort
   -
     topic: /tf_static
     type: tf2_msgs/msg/TFMessage
@@ -18,7 +20,11 @@ topics:
     topic: /scan
     type: sensor_msgs/msg/LaserScan
     queue_size: 10
+    qos:
+      reliability: best_effort
   -
     topic: /base_scan
     type: sensor_msgs/msg/LaserScan
     queue_size: 10
+    qos:
+      reliability: best_effort

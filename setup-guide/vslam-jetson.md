@@ -1,6 +1,6 @@
 # Running VSLAM
 ## 1st Launch
-To start, we need download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, `scripts/run_dev.sh` automatically create and launch a docker image. **Note:** This only needs be run once, subsequent launches can be done with `vslam_subsequent_launch.sh`.
+To start, we need download various libraries and run commands to ensure the ZED SDK is installed. In addition, VSLAM requires to be run in isaac_ros_common, `scripts/run_dev.sh` automatically create and launch a docker image. **Note:** This only needs be run once, subsequent launches can be done with `vslam_subsequent_launch.sh`. (We also have no idea why this needs to be run every boot up as well... but we ran out of time to figure that out with the bash scripts we made)
 
 Run `vslam_first_launch.sh` script from the repository root, ensure that the isaac_ros_common submodule is cloned:
 ```

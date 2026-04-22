@@ -1,18 +1,14 @@
-
 # VSLAM on Desktop (Ubuntu 24.04)
-
 This guide runs Isaac ROS VSLAM from a desktop using the dev container with a ZED camera rosbag.
 It assumes your repository root is in REPO_DIR and you are launching from isaac_ros_common folder.
 
-## Notes to Start
-
+## Notes
 - Verified for Ubuntu 24.04 Desktop
 - Docker Engine installed
 - A rosbag with ZED Depth Camera topics compatible
 - An NVIDIA GPU with CUDA 
 
 ## Terminal 1: Start Dev Container and Launch VSLAM
-
 On host:
 
 ```bash
@@ -52,7 +48,7 @@ Launch VSLAM:
 ros2 launch custom-isaac-ros custom_vslam.launch.py
 ```
 
-## Terminal 2: Open RViz in a Second Dev Container Shell
+## Terminal 2a: Open RViz in a Second Dev Container Shell
 
 On host:
 
@@ -65,6 +61,14 @@ Inside the container:
 ```bash
 rviz2 -d $(ros2 pkg prefix isaac_ros_visual_slam --share)/rviz/default.cfg.rviz
 ```
+
+## Terminal 2b: Foxglove Bridge
+You may also run a Foxglove bridge to view the VSLAM result via Foxglove visualization instead of RViz.
+```
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+```
+
+Outside your container, run [Foxglove](https://foxglove.dev/).
 
 ## Terminal 3: Play Rosbag
 

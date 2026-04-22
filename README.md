@@ -49,13 +49,13 @@ git submodule update --init --recursive
 slam-vslam-glass/
 ├── README.md
 │
-├── slam_launch.sh
+├── lidar_launch.sh
 ├── vslam_first_launch.sh
 ├── vslam_subsequent_launch.sh
 │
 ├── docker-slam/
-│   ├── docker-compose.yml
-│   ├── Dockerfile
+│   ├── docker-compose.lidar.yml
+│   ├── Dockerfile.lidar
 │   └── entrypoint.sh
 │
 ├── setup-guide/

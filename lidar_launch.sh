@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-    echo "Usage: ./slam_launch.sh [build|up|down|restart|logs|shell]"
+    echo "Usage: ./lidar_launch.sh [build|up|down|restart|logs|shell]"
     echo ""
     echo "  Commands:"
     echo "    build     - Build the Docker image"
@@ -14,9 +14,9 @@ usage() {
     echo "    shell     - Open a shell inside the running container"
     echo ""
     echo "  Examples:"
-    echo "    ./slam_launch.sh up"
-    echo "    ./slam_launch.sh build"
-    echo "    ./slam_launch.sh shell"
+    echo "    ./lidar_launch.sh up"
+    echo "    ./lidar_launch.sh build"
+    echo "    ./lidar_launch.sh shell"
     exit 1
 }
 
@@ -27,7 +27,7 @@ fi
 
 COMMAND=$1
 
-COMPOSE_FILE="docker-slam/docker-compose.yml"
+COMPOSE_FILE="docker-slam/docker-compose.lidar.yml"
 
 # check compose file exists
 if [ ! -f "$COMPOSE_FILE" ]; then
@@ -51,7 +51,7 @@ case $COMMAND in
         docker compose -f $COMPOSE_FILE up -d
         echo ""
         echo "Container started. To open a shell run:"
-        echo "  ./slam_launch.sh shell"
+        echo "  ./lidar_launch.sh shell"
         ;;
     down)
         echo "Stopping container..."

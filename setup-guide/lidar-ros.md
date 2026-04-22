@@ -3,14 +3,14 @@
 You can run this script to build and bring up the Docker container.
 ```
 # build and start
-./slam_launch.sh up
+./lidar_launch.sh up
 
 # other commands
-./slam_launch.sh build       # build only
-./slam_launch.sh shell       # open a shell inside the container
-./slam_launch.sh logs        # follow logs
-./slam_launch.sh down        # stop the container
-./slam_launch.sh restart     # stop and restart
+./lidar_launch.sh build       # build only
+./lidar_launch.sh shell       # open a shell inside the container
+./lidar_launch.sh logs        # follow logs
+./lidar_launch.sh down        # stop the container
+./lidar_launch.sh restart     # stop and restart
 ```
 
 ## RoboSense SDK Setup
@@ -30,8 +30,8 @@ sudo ip addr add 192.168.1.102/24 dev eno1 # Temporary, use Settings->Network fo
 
 Start the container:
 ```
-./slam_launch.sh up
-./slam_launch.sh shell
+./lidar_launch.sh up
+./lidar_launch.sh shell
 ```
 
 ### Launch Lidar Node (w/ RViz)
@@ -75,7 +75,7 @@ echo $RMW_IMPLEMENTATION
 ros2 run demo_nodes_cpp talker
 
 # terminal 2 — open second shell into same container
-./slam_launch.sh shell
+./lidar_launch.sh shell
 ros2 run demo_nodes_cpp listener
 ```
 

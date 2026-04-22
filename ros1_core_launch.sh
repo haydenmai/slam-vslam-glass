@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   cat <<'EOF'
-Usage: bash ./launch_ros1_core.sh
+Usage: bash ./ros1_core_launch.sh
 
 Starts ROS1 roscore with a clean environment.
 

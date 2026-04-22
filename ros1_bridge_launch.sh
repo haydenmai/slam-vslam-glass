@@ -10,7 +10,7 @@ BRIDGE_WS_SETUP=${BRIDGE_WS_SETUP:-$HOME/bridge_ws/install/setup.bash}
 
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   cat <<EOF
-Usage: bash ./launch_ros1_bridge.sh
+Usage: bash ./ros1_bridge_launch.sh
 
 Starts ros1_bridge with a clean environment.
 

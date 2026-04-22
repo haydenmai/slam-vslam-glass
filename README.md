@@ -49,6 +49,9 @@ git submodule update --init --recursive
 slam-vslam-glass/
 ├── README.md
 │
+├── ros1_bridge_launch.sh
+├── ros1_core_launch.sh
+├── slam_glass_launch.sh
 ├── lidar_launch.sh
 ├── vslam_first_launch.sh
 ├── vslam_subsequent_launch.sh

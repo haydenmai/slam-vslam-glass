@@ -18,7 +18,7 @@ fi
 
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   cat <<EOF
-Usage: bash ./launch_slam_glass.sh [launch_file]
+Usage: bash ./slam_glass_launch.sh [launch_file]
 
 Launches slam_glass with ROS1 environment.
 

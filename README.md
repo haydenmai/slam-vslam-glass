@@ -17,7 +17,7 @@
 - Kobuki Turtlebot 2
 
 ### Guides
-This repository also contains a list of guides found in the `setup-guide` folder to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
+This repository also contains a list of guides found in the [setup-guide](setup-guide/) folder to help setup SLAM & VSLAM on the Jetson Orin NX. Feel free to fork this repository and make edits to the markdown files if methods change.
 
 If these scripts does fail in the future, checkout to the commit below. After checking out to the branch, `setup-guide` will contain a list of commands you can run manually to investigate point of failure.
 ```
@@ -59,13 +59,20 @@ slam-vslam-glass/
 │   └── entrypoint.sh
 │
 ├── setup-guide/
-│   ├── slam.md
+│   ├── bridge_topics.yaml
+│   ├── lidar-ros.md
+│   ├── ros1-ros2-bridge.md
 │   ├── turtlebot2.md
-│   ├── vslam-rosbag.md
-│   └── vslam.md
+│   ├── vslam-desktop.md
+│   ├── vslam-jetson.md
+│   └── vslam-rosbag.md
 │
-├── isaac_ros_common/ 	# submodule
-└── spark-fast-lio/ 	# submodule
+├── pointcloud_to_laserscan/  # submodule
+├── ros1_bridge/              # submodule
+├── slam_glass/               # submodule
+│
+├── isaac_ros_common/ 		  # submodule
+└── spark-fast-lio/ 		  # submodule
 ```
 
 ## References
@@ -77,4 +84,6 @@ references needed
 - [zed-ros2-wrapper](https://github.com/stereolabs/zed-ros2-wrapper.git) - StereoLabs ZED camera ROS2 interfaces
 - [isaac_ros_common](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git) - NVIDIA Isaac ROS common utilities
 - [rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk.git) - RoboSense LiDAR SDK
+- [ros1_bridge](https://github.com/ros2/ros1_bridge.git) - ROS 1 and ROS 2 bridge package
+- [pointcloud_to_laserscan](https://github.com/ros-perception/pointcloud_to_laserscan.git) - Point cloud to LaserScan converter
 - [spark-fast-lio](https://github.com/MIT-SPARK/spark-fast-lio.git) - MIT Spark Fast LIO (LIDAR-Inertial Odometry)

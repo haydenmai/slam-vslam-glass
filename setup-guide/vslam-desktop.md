@@ -26,7 +26,7 @@ cd /workspaces/isaac_ros-dev/src
 git clone https://github.com/dungrup/custom-isaac-ros.git
 ```
 
-Install necessary files:
+Install necessary packages:
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
@@ -49,7 +49,6 @@ ros2 launch custom-isaac-ros custom_vslam.launch.py
 ```
 
 ## Terminal 2a: Open RViz in a Second Dev Container Shell
-
 On host:
 
 ```bash
@@ -71,11 +70,15 @@ ros2 launch foxglove_bridge foxglove_bridge_launch.xml
 Outside your container, run [Foxglove](https://foxglove.dev/).
 
 ## Terminal 3: Play Rosbag
-
 Inside the container:
 ```bash
 ros2 bag play <path_to_bag_folder> --clock -r 1
 ```
+# Troubleshoot & Notes
+For future launches:
+- `run_dev.sh` will reuse a cached image to launch the container
+- You will still need to re-install the `ros-humble-isaac-ros-visual-slam` and `ros-humble-isaac-ros-image-proc` packages.
+- Ensure ROS packages are activated via `source /opt/ros/humble/setup.bash && source install/setup.bash`
 
 # Links
 [custom-isaac-ros](https://github.com/dungrup/custom-isaac-ros.git) - Custom repository to run ZED Camera rogbags

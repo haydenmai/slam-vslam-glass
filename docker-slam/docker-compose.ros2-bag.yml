@@ -1,0 +1,30 @@
+services:
+  ros2_bag:
+    build:
+      context: .
+      dockerfile: Dockerfile.ros2-bag
+      args:
+        RSLIDAR_SDK_REF: ${RSLIDAR_SDK_REF:-main}
+        RSLIDAR_MSG_REF: ${RSLIDAR_MSG_REF:-main}
+        POINTCLOUD_TO_LASERSCAN_REF: ${POINTCLOUD_TO_LASERSCAN_REF:-foxy}
+        RSLIDAR_LIDAR_TYPE: ${RSLIDAR_LIDAR_TYPE:-RSAIRY}
+        RSLIDAR_MSOP_PORT: ${RSLIDAR_MSOP_PORT:-6699}
+        RSLIDAR_DIFOP_PORT: ${RSLIDAR_DIFOP_PORT:-7788}
+        RSLIDAR_IMU_PORT: ${RSLIDAR_IMU_PORT:-6688}
+    container_name: ros2_foxy_bag_x64
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    volumes:
+      - ../src:/home/linda/ros2_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - type: bind
+        source: ../lidar_bags
+        target: /home/linda/lidar_bags
+        read_only: true
+        bind:
+          create_host_path: true
+    stdin_open: true
+    tty: true

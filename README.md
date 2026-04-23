@@ -40,7 +40,8 @@ git clone --recursive git@github.com:haydenmai/slam-vslam-glass.git
 git clone git@github.com:haydenmai/slam-vslam-glass.git 
 
 # Run this in the future to get the submodules
-git submodule update --init --recursive 
+git submodule update --init --recursive
+Note: Unlike VSLAM and SLAM, Glass Slam will have its own seperate zip file that will need to be unzipped and will have its own set of instructions. This is because of the inability to create the enviroment with Dacker.
 ```
 
 ## Directory

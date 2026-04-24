@@ -110,6 +110,21 @@ Why this happens:
 3. The compose service now exports `ROS_PACKAGE_PATH` and `CMAKE_PREFIX_PATH` explicitly to avoid this failure.
 4. The runtime container also installs `ros-noetic-tf` on startup, which may take 1-2 minutes the first time.
 
+To open the container:
+1. Remote Explorer -> ros1_slam_glass -> Open Folder -> /home/ros1/slam_glass_ws
+2. Source the Base ROS environment
+```bash
+source /opt/ros/noetic/setup.bash
+```
+3. Run the Build
+```bash
+catkin_make
+```
+4. Source the devel folder
+```bash
+source devel/setup.bash
+```
+
 ## Step 5: Play ROS2 bag from container
 
 Inspect bag:

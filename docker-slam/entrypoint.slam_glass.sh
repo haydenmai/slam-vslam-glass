@@ -1,24 +1,30 @@
 #!/usr/bin/env bash
 # SLAM Glass container entrypoint - starts roscore and optionally slam_glass
-set -e
 
 USERNAME=${USERNAME:-linda}
 ROS_DISTRO=${ROS_DISTRO:-noetic}
+WORKSPACE_DIR=/home/$USERNAME/slam_glass_ws
 
-# Source ROS and workspace
-source /opt/ros/${ROS_DISTRO}/setup.bash
-source /home/$USERNAME/slam_glass_ws/devel/setup.bash
+# Source ROS setup
+if [ -f /opt/ros/${ROS_DISTRO}/setup.bash ]; then
+    source /opt/ros/${ROS_DISTRO}/setup.bash || true
+fi
+
+# Source workspace setup if it exists
+if [ -f $WORKSPACE_DIR/devel/setup.bash ]; then
+    source $WORKSPACE_DIR/devel/setup.bash || true
+fi
 
 # Set ROS environment variables
 export ROS_MASTER_URI=${ROS_MASTER_URI:-http://127.0.0.1:11311}
 export ROS_IP=${ROS_IP:-127.0.0.1}
-export LD_LIBRARY_PATH=/home/$USERNAME/slam_glass_ws/src/slam_glass/gmapping_export/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$WORKSPACE_DIR/src/slam_glass/gmapping_export/lib:$LD_LIBRARY_PATH
 
-echo "SLAM Glass entrypoint: ROS_DISTRO=$ROS_DISTRO ROS_MASTER_URI=$ROS_MASTER_URI ROS_IP=$ROS_IP"
+echo "SLAM Glass entrypoint: ROS_DISTRO=$ROS_DISTRO ROS_MASTER_URI=$ROS_MASTER_URI ROS_IP=$ROS_IP WORKSPACE_DIR=$WORKSPACE_DIR"
 
 # Ensure .ros directory has proper permissions
-mkdir -p $HOME/.ros
-chmod 755 $HOME/.ros
+mkdir -p $HOME/.ros 2>/dev/null || true
+chmod 755 $HOME/.ros 2>/dev/null || true
 
 # Check if we should start roscore
 if [ "$1" = "roscore" ] || [ "$1" = "master" ]; then

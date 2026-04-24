@@ -23,7 +23,10 @@ services:
       - ROS_IP=127.0.0.1
       - ROS_DISTRO=noetic
       - USERNAME=linda
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
     volumes:
-      - ../slam_glass_ws:/home/linda/slam_glass_ws
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /home/linda/.Xauthority:/home/linda/.Xauthority:rw
     working_dir: /home/linda/slam_glass_ws
-    command: bash -lc "source /opt/ros/noetic/setup.bash ; source /home/linda/slam_glass_ws/devel/setup.bash ; tail -f /dev/null"
+    command: tail -f /dev/null

@@ -76,6 +76,9 @@ slam-vslam-glass/
 └── spark-fast-lio/ 		  # submodule
 ```
 
+## Acknowledgement
+Usage of AI (Gemini, Copilot) was helped to debug driver installations and Isaac ROS compilation errors, creating bash scripts, document the changes that were made in the Glass SLAM repository, and troubleshoot the depreciated Gmapping-export within Glass SLAM.
+
 ## References
 ### Papers
 references needed

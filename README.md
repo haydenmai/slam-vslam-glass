@@ -72,6 +72,8 @@ slam-vslam-glass/
 ├── ros1_bridge/              # submodule
 ├── slam_glass/               # submodule
 │
+├── glass_slam_fastlio_bridge_ws
+│
 ├── isaac_ros_common/ 		  # submodule
 └── spark-fast-lio/ 		  # submodule
 ```
